@@ -1,0 +1,126 @@
+{
+  "count": 4,
+  "stores": [
+    {
+      "status": {
+        "available": "1.29TiB",
+        "capacity": "1.8TiB",
+        "leader_count": 1410,
+        "region_count": 4210,
+        "region_weight": 1,
+        "start_ts": "2026-09-20T03:00:00Z",
+        "used_size": "520GiB"
+      },
+      "store": {
+        "address": "10.20.2.11:20160",
+        "id": 1,
+        "labels": [
+          {
+            "key": "zone",
+            "value": "az1"
+          },
+          {
+            "key": "rack",
+            "value": "r01"
+          },
+          {
+            "key": "host",
+            "value": "10-20-2-11"
+          }
+        ],
+        "state_name": "Up",
+        "status_address": "10.20.2.11:20180",
+        "version": "8.1.5"
+      }
+    },
+    {
+      "status": {
+        "available": "1.31TiB",
+        "capacity": "1.8TiB",
+        "leader_count": 1395,
+        "region_count": 4180,
+        "region_weight": 1,
+        "start_ts": "2026-09-20T03:00:00Z",
+        "used_size": "505GiB"
+      },
+      "store": {
+        "address": "10.20.2.12:20160",
+        "id": 2,
+        "labels": [
+          {
+            "key": "zone",
+            "value": "az2"
+          },
+          {
+            "key": "rack",
+            "value": "r02"
+          },
+          {
+            "key": "host",
+            "value": "10-20-2-12"
+          }
+        ],
+        "state_name": "Up",
+        "status_address": "10.20.2.12:20180",
+        "version": "8.1.5"
+      }
+    },
+    {
+      "status": {
+        "available": "1.27TiB",
+        "capacity": "1.8TiB",
+        "leader_count": 1405,
+        "region_count": 4235,
+        "region_weight": 1,
+        "start_ts": "2026-09-20T03:00:00Z",
+        "used_size": "540GiB"
+      },
+      "store": {
+        "address": "10.20.2.13:20160",
+        "id": 3,
+        "labels": [
+          {
+            "key": "zone",
+            "value": "az3"
+          },
+          {
+            "key": "rack",
+            "value": "r03"
+          },
+          {
+            "key": "host",
+            "value": "10-20-2-13"
+          }
+        ],
+        "state_name": "Up",
+        "status_address": "10.20.2.13:20180",
+        "version": "8.1.5"
+      }
+    },
+    {
+      "status": {
+        "available": "3.6TiB",
+        "capacity": "7TiB",
+        "leader_count": 0,
+        "region_count": 24100,
+        "used_size": "3.4TiB"
+      },
+      "store": {
+        "address": "10.20.3.11:3930",
+        "id": 21,
+        "labels": [
+          {
+            "key": "engine",
+            "value": "tiflash"
+          },
+          {
+            "key": "zone",
+            "value": "az1"
+          }
+        ],
+        "state_name": "Up",
+        "version": "v8.1.5"
+      }
+    }
+  ]
+}

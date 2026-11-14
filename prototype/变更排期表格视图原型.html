@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>变更排期 · 表格视图原型</title>
+<style>
+:root{--bg:#f4f6f9;--card:#fff;--text:#1f2937;--muted:#6b7280;--line:#e5e7eb;--brand:#d93025;--accent:#2563eb;--ok:#1a7f37;--warn:#b45309;--bad:#cf222e;
+  --ok-bg:#e6f4ea;--warn-bg:#fff4e0;--bad-bg:#fde8e8;--info-bg:#e8f0fe;--gray-bg:#eef0f3;--hover:#f8fafc}
+@media (prefers-color-scheme:dark){:root{--bg:#0f141a;--card:#171d25;--text:#e5e7eb;--muted:#9aa4b2;--line:#2a323d;--brand:#ef5350;--accent:#6ea8fe;--ok:#4ac26b;--warn:#f0b34a;--bad:#ff7b72;
+  --ok-bg:#12301d;--warn-bg:#3a2b10;--bad-bg:#3d1a1a;--info-bg:#172a4a;--gray-bg:#232b35;--hover:#1c2430}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.55 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:1280px;margin:0 auto;padding:20px 16px 60px}
+.proto{background:var(--info-bg);border:1px dashed var(--accent);border-radius:8px;padding:8px 12px;margin-bottom:14px;font-size:13px;color:var(--text)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.card h2{margin:0 0 10px;font-size:15px;display:flex;gap:8px;align-items:baseline}
+.sub{font-weight:400;color:var(--muted);font-size:12px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.small{font-size:12px}.muted{color:var(--muted)}.mono{font-family:ui-monospace,Consolas,monospace}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:6px;padding:5px 11px;cursor:pointer;font-size:13px}
+.btn:hover{background:var(--hover)}.btn.sm{padding:2px 8px;font-size:12px}
+.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:var(--card);color:var(--text);padding:5px 14px;cursor:pointer;font-size:13px}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--text);color:var(--card)}
+.chip{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:999px;padding:2px 11px;font-size:12px;cursor:pointer}
+.chip.on{background:var(--text);color:var(--card);border-color:var(--text)}
+.tag{display:inline-block;border-radius:999px;padding:0 8px;font-size:12px;line-height:20px;background:var(--gray-bg);color:var(--muted);white-space:nowrap}
+.tag.ok{background:var(--ok-bg);color:var(--ok)}.tag.warn{background:var(--warn-bg);color:var(--warn)}
+.tag.bad{background:var(--bad-bg);color:var(--bad)}.tag.info{background:var(--info-bg);color:var(--accent)}
+.notice{border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:13px;display:flex;gap:8px}
+.notice.bad{background:var(--bad-bg);color:var(--bad)}.notice.warn{background:var(--warn-bg);color:var(--warn)}
+.tbl-wrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;white-space:nowrap;background:var(--card);position:sticky;top:0}
+tr.day td{background:var(--gray-bg);font-weight:600;padding:6px 10px;border-bottom:1px solid var(--line)}
+tr.day.today td{background:var(--info-bg)}
+tr.empty td{color:var(--muted);font-size:12px;padding:6px 10px 6px 28px}
+tr.item{cursor:pointer}tr.item:hover td{background:var(--hover)}
+tr.item.past td{opacity:.78}
+.bar{display:inline-block;width:3px;border-radius:2px;align-self:stretch;margin-right:8px;vertical-align:top;min-height:34px}
+.c-pending{background:var(--accent)}.c-scheduled{background:var(--warn)}.c-running{background:var(--brand)}.c-succeeded{background:var(--ok)}.c-failed{background:var(--bad)}.c-cancelled{background:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:900px){.grid2{grid-template-columns:1fr}}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(460px,100%);background:var(--card);border-left:1px solid var(--line);box-shadow:-8px 0 24px rgba(0,0,0,.18);padding:16px 18px;overflow:auto;transform:translateX(105%);transition:transform .18s}
+.drawer.open{transform:none}
+.kv{display:grid;grid-template-columns:84px 1fr;gap:6px 10px;margin:10px 0}
+.kv div:nth-child(odd){color:var(--muted)}
+.placeholder{border:1px dashed var(--line);border-radius:8px;padding:40px;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="proto"><b>原型说明</b>：这是「变更排期」的表格视图示意，数据为样例（集群 tidb-test，服务器时间 2026-10-10 20:07），不会进入安装包。与日历共用同一份数据与「显示已结束」开关；点任意一行打开详情抽屉。</div>
+
+  <div class="card">
+    <div class="row">
+      <b id="range"></b>
+      <span class="row" style="gap:4px"><button class="btn sm" id="prev">‹ 上一周</button><button class="btn sm" id="cur">本周</button><button class="btn sm" id="next">下一周 ›</button></span>
+      <span class="small muted">服务器时间 <b>2026-10-10 20:07</b></span>
+      <span id="counts" class="row" style="gap:6px"></span>
+      <label class="small"><input type="checkbox" id="showDone" checked> 显示已结束</label>
+      <span style="margin-left:auto" class="row">
+        <span class="seg" id="viewSeg"><button data-v="table" class="on">表格</button><button data-v="cal">日历</button></span>
+        <button class="btn primary">＋ 新建排期</button>
+      </span>
+    </div>
+  </div>
+
+  <div id="notices"></div>
+
+  <div id="viewCal" class="card" style="display:none">
+    <h2>周视图 <span class="sub">沿用现有日历（本原型不重复绘制）</span></h2>
+    <div class="placeholder">日历视图保持现状：按小时的 7 列网格，底色是窗口规则，块是排期。</div>
+  </div>
+
+  <div id="viewTable">
+    <div class="card">
+      <h2>排期表 <span class="sub" id="tblSub"></span></h2>
+      <div class="row" style="margin-bottom:10px">
+        <span class="row" style="gap:6px" id="stChips"></span>
+        <span class="row" style="gap:6px" id="rkChips"></span>
+        <input id="q" type="search" placeholder="搜索编号 / 标题 / 实例 / 申请人" style="border:1px solid var(--line);border-radius:6px;padding:4px 10px;background:var(--card);color:var(--text);min-width:240px">
+        <label class="small"><input type="checkbox" id="group" checked> 按日期分组</label>
+        <label class="small"><input type="checkbox" id="hideEmpty" checked> 隐藏没有排期的日期</label>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>计划时间</th><th>编号</th><th>变更</th><th>风险</th><th>状态</th><th>影响对象</th><th>申请人 / 审批</th><th>窗口 / 冻结 / 冲突</th><th></th></tr></thead>
+        <tbody id="tb"></tbody>
+      </table></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2>窗口规则 <span class="sub">来自「环境与设置 → 变更窗口规则」；日历里的底色在这里改为列表</span></h2>
+        <div class="tbl-wrap"><table><thead><tr><th>名称</th><th>类型</th><th>星期</th><th>时段</th><th>适用风险</th></tr></thead><tbody id="ruleTb"></tbody></table></div>
+      </div>
+      <div class="card">
+        <h2>变更冻结期 <span class="sub">冻结期内非紧急变更会被拒绝</span></h2>
+        <div class="tbl-wrap"><table><thead><tr><th>名称</th><th>起</th><th>止</th><th>状态</th></tr></thead><tbody id="fzTb"></tbody></table></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<aside class="drawer" id="drawer"><div class="row"><b id="drTitle"></b><button class="btn sm" style="margin-left:auto" id="drClose">关闭</button></div><div id="drBody"></div></aside>
+
+<script>
+(function(){
+  var NOW = new Date(2026,9,10,20,7).getTime(), DAY = 864e5, WD = ['日','一','二','三','四','五','六'];
+  var D = function(m,d,h,mi){ return new Date(2026,m-1,d,h||0,mi||0).getTime(); };
+  var ST = {pending:['info','待审批'],scheduled:['warn','已排期'],running:['info','执行中'],succeeded:['ok','成功'],failed:['bad','失败'],cancelled:['','已取消']};
+  var DONE = ['succeeded','failed','cancelled'];
+  var RK = {low:['ok','低'],mid:['warn','中'],high:['bad','高']};
+  var MODE = {prefer:['ok','推荐'],avoid:['warn','不建议'],block:['bad','禁止']};
+  var RULES = [
+    {name:'夜间低峰',mode:'prefer',days:[],from:'00:00',to:'06:00',risks:[]},
+    {name:'备份窗口',mode:'avoid',days:[],from:'02:00',to:'04:00',risks:[]},
+    {name:'早高峰',mode:'avoid',days:[],from:'09:00',to:'11:00',risks:['mid','high']},
+    {name:'工作日业务高峰',mode:'block',days:[1,2,3,4,5],from:'10:00',to:'12:00',risks:['high']}
+  ];
+  var FREEZES = [{label:'国庆保障期',from:D(10,1,0),to:D(10,7,23,59)}];
+  var CH = [
+    {id:'CHG-0002',title:'调整 tidb 慢日志阈值',kind:'配置变更',risk:'low',state:'cancelled',s:D(10,6,14),e:D(10,6,14,20),who:'dba',ap:'0/0',targets:['tidb-1','tidb-2'],hosts:['172.16.0.201','172.16.0.205']},
+    {id:'CHG-0003',title:'调整 PD 调度参数 region-schedule-limit',kind:'配置变更',risk:'mid',state:'succeeded',s:D(10,6,3),e:D(10,6,3,20),who:'dba',ap:'1/1',targets:['pd-1','pd-2','pd-3'],hosts:['172.16.0.202','172.16.0.203','172.16.0.204']},
+    {id:'CHG-0004',title:'滚动重启 TiKV',kind:'滚动重启',risk:'mid',state:'failed',s:D(10,8,2,30),e:D(10,8,3,30),who:'dba',ap:'1/1',targets:['tikv-1','tikv-2','tikv-3'],hosts:['172.16.0.202','172.16.0.203','172.16.0.204'],reason:'等待 tikv-2 就绪超时'},
+    {id:'CHG-0011',title:'扩容 TiKV（tikv-4）',kind:'扩容',risk:'mid',state:'running',s:D(10,10,19,45),e:D(10,10,20,30),who:'dba',ap:'1/1',targets:['tikv-4'],hosts:['172.16.0.206']},
+    {id:'CHG-0010',title:'全量备份到 s3://backup/tidb-test',kind:'备份',risk:'low',state:'scheduled',s:D(10,10,22),e:D(10,10,23),who:'sre',ap:'0/0',targets:['集群'],hosts:[]},
+    {id:'CHG-0007',title:'升级集群到 v8.5.8',kind:'升级',risk:'high',state:'scheduled',s:D(10,11,1),e:D(10,11,3),who:'dba',ap:'2/2',targets:['全部 8 个实例'],hosts:['172.16.0.201','172.16.0.202','172.16.0.203','172.16.0.204','172.16.0.205']},
+    {id:'CHG-0008',title:'调整 TiKV block-cache-size',kind:'配置变更',risk:'mid',state:'pending',s:D(10,11,9,40),e:D(10,11,10,10),who:'dba',ap:'0/1',targets:['tikv-1'],hosts:['172.16.0.202']},
+    {id:'CHG-0009',title:'进入维护 172.16.0.202（内核升级）',kind:'主机维护',risk:'high',state:'pending',s:D(10,11,9,30),e:D(10,11,11),who:'dba',ap:'0/2',targets:['tikv-1','pd-1'],hosts:['172.16.0.202']}
+  ];
+  var st = {week: D(10,5), done:true, stF:'all', rkF:'all', q:'', group:true, hideEmpty:true, view:'table'};
+  var $ = function(s){return document.querySelector(s);};
+  var p2 = function(n){return (n<10?'0':'')+n;};
+  var fT = function(t){var d=new Date(t);return p2(d.getHours())+':'+p2(d.getMinutes());};
+  var fMD = function(t){var d=new Date(t);return (d.getMonth()+1)+'/'+d.getDate();};
+  var sod = function(t){var d=new Date(t);d.setHours(0,0,0,0);return d.getTime();};
+  var hm = function(s){var m=s.split(':');return +m[0]*60+ +m[1];};
+  var esc = function(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});};
+  var tag = function(t,c){return '<span class="tag '+(c||'')+'">'+esc(t)+'</span>';};
+
+  function ruleHits(c){
+    var hits=[], d0=sod(c.s), d1=sod(c.e-1);
+    for(var d=d0; d<=d1; d+=DAY){
+      var dow=new Date(d).getDay();
+      RULES.forEach(function(r){
+        if(r.days.length && r.days.indexOf(dow)<0) return;
+        if(r.risks.length && r.risks.indexOf(c.risk)<0) return;
+        var a=d+hm(r.from)*6e4, b=d+hm(r.to)*6e4;
+        if(c.s<b && c.e>a && !hits.some(function(h){return h.name===r.name;})) hits.push(r);
+      });
+    }
+    return hits;
+  }
+  function freezeHit(c){return FREEZES.filter(function(f){return c.s<f.to && c.e>f.from;})[0];}
+  function conflicts(){
+    var live=CH.filter(function(c){return ['pending','scheduled','running'].indexOf(c.state)>=0;}), out=[];
+    for(var i=0;i<live.length;i++)for(var j=i+1;j<live.length;j++){
+      var a=live[i], b=live[j]; if(!(a.s<b.e && b.s<a.e)) continue;
+      var sh=a.targets.concat(a.hosts).filter(function(x){return b.targets.concat(b.hosts).indexOf(x)>=0;});
+      if(sh.length) out.push({a:a,b:b,shared:sh});
+    }
+    return out;
+  }
+  var CONF = conflicts();
+  function confOf(c){return CONF.filter(function(x){return x.a===c||x.b===c;}).map(function(x){return x.a===c?x.b.id:x.a.id;});}
+
+  function visible(){
+    var w0=st.week, w1=st.week+7*DAY;
+    return CH.filter(function(c){
+      if(c.s<w0||c.s>=w1) return false;
+      if(!st.done && DONE.indexOf(c.state)>=0) return false;
+      if(st.stF!=='all'){
+        if(st.stF==='done'){ if(DONE.indexOf(c.state)<0) return false; }
+        else if(c.state!==st.stF) return false;
+      }
+      if(st.rkF!=='all' && c.risk!==st.rkF) return false;
+      if(st.q){var q=st.q.toLowerCase(); if((c.id+c.title+c.who+c.targets.join(' ')+c.hosts.join(' ')).toLowerCase().indexOf(q)<0) return false;}
+      return true;
+    }).sort(function(a,b){return a.s-b.s;});
+  }
+
+  function rowHtml(c){
+    var hits=ruleHits(c), fz=freezeHit(c), cf=confOf(c), dur=Math.round((c.e-c.s)/6e4);
+    var worst = hits.slice().sort(function(a,b){var o={block:2,avoid:1,prefer:0};return o[b.mode]-o[a.mode];})[0];
+    var win = hits.length ? hits.map(function(r){return tag(r.name+' · '+MODE[r.mode][1], MODE[r.mode][0]);}).join(' ') : '<span class="muted small">无规则命中</span>';
+    var extra = (fz?' '+tag('冻结期：'+fz.label,'bad'):'')+(cf.length?' '+tag('冲突 '+cf.join('、'),'bad'):'');
+    var past = DONE.indexOf(c.state)>=0 ? ' past' : '';
+    var tg = c.targets.slice(0,3).join('、')+(c.targets.length>3?' 等 '+c.targets.length+' 个':'');
+    var act = c.state==='pending' ? '<button class="btn sm" data-act="approve" data-id="'+c.id+'">通过</button>' : '';
+    return '<tr class="item'+past+'" data-id="'+c.id+'">'
+      +'<td class="mono small" style="white-space:nowrap"><span class="bar c-'+c.state+'"></span>'+fMD(c.s)+' '+fT(c.s)+'–'+fT(c.e)+'<div class="muted" style="margin-left:11px">'+dur+' 分钟</div></td>'
+      +'<td class="mono small">'+c.id+'</td>'
+      +'<td><b>'+esc(c.title)+'</b><div class="small muted">'+esc(c.kind)+(c.reason?' · '+esc(c.reason):'')+'</div></td>'
+      +'<td>'+tag(RK[c.risk][1],RK[c.risk][0])+'</td>'
+      +'<td>'+tag(ST[c.state][1],ST[c.state][0])+'</td>'
+      +'<td class="small">'+esc(tg)+'</td>'
+      +'<td class="small">'+esc(c.who)+'<div class="muted">审批 '+c.ap+'</div></td>'
+      +'<td class="small">'+win+extra+'</td>'
+      +'<td style="white-space:nowrap">'+act+'</td></tr>';
+  }
+
+  function render(){
+    var w0=st.week, w1=w0+6*DAY;
+    $('#range').textContent = fMD(w0)+' – '+fMD(w1);
+    var cnt=function(k){return CH.filter(function(c){return c.state===k;}).length;};
+    $('#counts').innerHTML = tag('待审批 '+cnt('pending'),cnt('pending')?'info':'')+tag('已排期 '+cnt('scheduled'),cnt('scheduled')?'warn':'')+tag('执行中 '+cnt('running'),cnt('running')?'info':'');
+    $('#notices').innerHTML = CONF.map(function(x){return '<div class="notice bad"><span>✖</span><div>冲突：'+x.a.id+' 与 '+x.b.id+' 的计划窗口重叠，且涉及同一资源（'+esc(x.shared.join('、'))+'）</div></div>';}).join('');
+
+    var list=visible(), html='';
+    $('#tblSub').textContent = '集群 tidb-test · 本周 '+list.length+' 个排期';
+    if(!list.length && !st.group){ html='<tr class="empty"><td colspan="9">没有符合条件的排期</td></tr>'; }
+    else if(!st.group){ html=list.map(rowHtml).join(''); }
+    else{
+      for(var i=0;i<7;i++){
+        var d=w0+i*DAY, items=list.filter(function(c){return sod(c.s)===d;});
+        if(!items.length && st.hideEmpty) continue;
+        var today = sod(NOW)===d, frozen = FREEZES.some(function(f){return d<f.to && d+DAY>f.from;});
+        var rules = RULES.filter(function(r){return !r.days.length || r.days.indexOf(new Date(d).getDay())>=0;}).map(function(r){return r.name+'('+MODE[r.mode][1]+' '+r.from+'–'+r.to+')';}).join('；');
+        html += '<tr class="day'+(today?' today':'')+'"><td colspan="9">周'+WD[new Date(d).getDay()]+' '+fMD(d)+(today?' · 今天':'')+' <span class="small muted" style="font-weight:400">· '+items.length+' 个排期'+(rules?' · 当日窗口：'+esc(rules):'')+'</span>'+(frozen?' '+tag('冻结期','bad'):'')+'</td></tr>';
+        html += items.length ? items.map(rowHtml).join('') : '<tr class="empty"><td colspan="9">无排期</td></tr>';
+      }
+      if(!html) html='<tr class="empty"><td colspan="9">没有符合条件的排期</td></tr>';
+    }
+    $('#tb').innerHTML = html;
+
+    $('#stChips').innerHTML = [['all','全部'],['pending','待审批'],['scheduled','已排期'],['running','执行中'],['done','已结束']].map(function(x){return '<button class="chip'+(st.stF===x[0]?' on':'')+'" data-st="'+x[0]+'">'+x[1]+'</button>';}).join('');
+    $('#rkChips').innerHTML = [['all','风险：全部'],['high','高'],['mid','中'],['low','低']].map(function(x){return '<button class="chip'+(st.rkF===x[0]?' on':'')+'" data-rk="'+x[0]+'">'+x[1]+'</button>';}).join('');
+
+    $('#ruleTb').innerHTML = RULES.map(function(r){
+      return '<tr><td>'+esc(r.name)+'</td><td>'+tag(MODE[r.mode][1],MODE[r.mode][0])+'</td><td class="small">'+(r.days.length?r.days.map(function(x){return '周'+WD[x];}).join(' '):'每天')+'</td><td class="mono small">'+r.from+'–'+r.to+'</td><td class="small">'+(r.risks.length?r.risks.map(function(x){return RK[x][1];}).join(' / '):'全部')+'</td></tr>';
+    }).join('');
+    $('#fzTb').innerHTML = FREEZES.map(function(f){
+      var s = NOW>=f.to?tag('已结束'):NOW>=f.from?tag('进行中','bad'):tag('未开始','warn');
+      return '<tr><td>'+esc(f.label)+'</td><td class="small">'+fMD(f.from)+' '+fT(f.from)+'</td><td class="small">'+fMD(f.to)+' '+fT(f.to)+'</td><td>'+s+'</td></tr>';
+    }).join('');
+  }
+
+  function openDetail(id){
+    var c=CH.filter(function(x){return x.id===id;})[0]; if(!c) return;
+    var hits=ruleHits(c), fz=freezeHit(c), cf=confOf(c);
+    $('#drTitle').textContent = c.id+' · '+c.kind;
+    $('#drBody').innerHTML = '<div class="kv">'
+      +'<div>标题</div><div>'+esc(c.title)+'</div>'
+      +'<div>状态</div><div>'+tag(ST[c.state][1],ST[c.state][0])+' '+tag('风险 '+RK[c.risk][1],RK[c.risk][0])+'</div>'
+      +'<div>计划窗口</div><div class="mono small">'+fMD(c.s)+' '+fT(c.s)+' → '+fMD(c.e)+' '+fT(c.e)+'</div>'
+      +'<div>申请人</div><div>'+esc(c.who)+'（审批 '+c.ap+'）</div>'
+      +'<div>影响对象</div><div>'+esc(c.targets.join('、'))+'</div>'
+      +'<div>涉及主机</div><div class="mono small">'+(c.hosts.join('、')||'—')+'</div>'
+      +'<div>窗口规则</div><div>'+(hits.length?hits.map(function(r){return tag(r.name+' · '+MODE[r.mode][1],MODE[r.mode][0]);}).join(' '):'无命中')+'</div>'
+      +'<div>冻结期</div><div>'+(fz?tag(fz.label,'bad'):'无')+'</div>'
+      +'<div>冲突</div><div>'+(cf.length?tag(cf.join('、'),'bad'):'无')+'</div>'
+      +(c.reason?'<div>失败原因</div><div>'+esc(c.reason)+'</div>':'')
+      +'</div><div class="small muted">（原型：真实抽屉沿用现有「变更详情」，含审批流程、步骤与日志。）</div>';
+    $('#drawer').classList.add('open');
+  }
+
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    var act=t.closest('[data-act]'); if(act){ alert('原型：这里会调用「通过审批」，并刷新表格。'); return; }
+    var s=t.closest('[data-st]'); if(s){ st.stF=s.dataset.st; render(); return; }
+    var r=t.closest('[data-rk]'); if(r){ st.rkF=r.dataset.rk; render(); return; }
+    var v=t.closest('#viewSeg button'); if(v){ st.view=v.dataset.v; [].forEach.call(document.querySelectorAll('#viewSeg button'),function(b){b.classList.toggle('on',b===v);}); $('#viewTable').style.display=st.view==='table'?'':'none'; $('#viewCal').style.display=st.view==='cal'?'':'none'; return; }
+    var row=t.closest('tr.item'); if(row){ openDetail(row.dataset.id); return; }
+    if(t.id==='drClose') $('#drawer').classList.remove('open');
+    if(t.id==='prev'){ st.week-=7*DAY; render(); }
+    if(t.id==='next'){ st.week+=7*DAY; render(); }
+    if(t.id==='cur'){ st.week=D(10,5); render(); }
+  });
+  $('#showDone').addEventListener('change',function(e){st.done=e.target.checked;render();});
+  $('#group').addEventListener('change',function(e){st.group=e.target.checked;render();});
+  $('#hideEmpty').addEventListener('change',function(e){st.hideEmpty=e.target.checked;render();});
+  $('#q').addEventListener('input',function(e){st.q=e.target.value.trim();render();});
+  render();
+})();
+</script>
+</body>
+</html>

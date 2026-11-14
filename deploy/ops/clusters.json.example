@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "clusters": [
+    {
+      "id": "prod-tidb-01",
+      "name": "prod-tidb-01",
+      "display": "生产主集群",
+      "desc": "主集群（启动参数 --cluster / --env 定义）：这一条只保存 display / desc，其余字段无效",
+      "primary": true
+    },
+    {
+      "id": "stg",
+      "name": "stg-tidb-01",
+      "display": "预发集群",
+      "desc": "预发环境（实时连接）；数据库密码不要写在文件里，在平台的「集群接入」页填写，保存时会用 master.key 加密成 mysqlPasswordEnc",
+      "env": "staging",
+      "mode": "live",
+      "pd": "http://10.20.1.21:2379",
+      "tidbStatus": "http://10.20.1.11:10080",
+      "prom": "http://10.20.1.31:9090",
+      "alert": "http://10.20.1.31:9093",
+      "mysqlHost": "10.20.1.11",
+      "mysqlPort": 4000,
+      "mysqlUser": "readonly",
+      "tiup": "/home/tidb/.tiup/bin/tiup"
+    },
+    {
+      "id": "dev",
+      "name": "dev-tidb-01",
+      "display": "开发集群（演示回放）",
+      "desc": "回放模式：不连接任何集群，读取 fixtures 数据包；目录必须位于 --fixtures-root 之下",
+      "env": "test",
+      "mode": "replay",
+      "fixtures": "/opt/tidbops/fixtures/dev"
+    }
+  ]
+}

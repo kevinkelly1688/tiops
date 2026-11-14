@@ -1,0 +1,29 @@
+Cluster type:       tidb
+Cluster name:       prod-tidb-01
+Cluster version:    v8.5.2
+Deploy user:        tidb
+SSH type:           builtin
+Dashboard URL:      http://10.0.1.21:2379/dashboard
+Grafana URL:        http://10.0.1.31:3000
+ID                 Role          Host       Ports        OS/Arch       Status   Data Dir                      Deploy Dir
+--                 ----          ----       -----        -------       ------   --------                      ----------
+10.0.1.31:9093     alertmanager  10.0.1.31  9093/9094    linux/x86_64  Up       /tidb-data/alertmanager-9093  /tidb-deploy/alertmanager-9093
+10.0.1.31:3000     grafana       10.0.1.31  3000         linux/x86_64  Up       -                             /tidb-deploy/grafana-3000
+10.0.1.21:2379     pd            10.0.1.21  2379/2380    linux/x86_64  Up|L|UI  /tidb-data/pd-2379            /tidb-deploy/pd-2379
+10.0.1.22:2379     pd            10.0.1.22  2379/2380    linux/x86_64  Up       /tidb-data/pd-2379            /tidb-deploy/pd-2379
+10.0.1.23:2379     pd            10.0.1.23  2379/2380    linux/x86_64  Up       /tidb-data/pd-2379            /tidb-deploy/pd-2379
+10.0.1.31:9090     prometheus    10.0.1.31  9090/12020   linux/x86_64  Up       /tidb-data/prometheus-9090    /tidb-deploy/prometheus-9090
+10.0.1.11:4000     tidb          10.0.1.11  4000/10080   linux/x86_64  Up       -                             /tidb-deploy/tidb-4000
+10.0.1.12:4000     tidb          10.0.1.12  4000/10080   linux/x86_64  Up       -                             /tidb-deploy/tidb-4000
+10.0.1.13:4000     tidb          10.0.1.13  4000/10080   linux/x86_64  Up       -                             /tidb-deploy/tidb-4000
+10.0.2.11:20160    tikv          10.0.2.11  20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+10.0.2.12:20160    tikv          10.0.2.12  20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+10.0.2.13:20160    tikv          10.0.2.13  20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+10.0.2.14:20160    tikv          10.0.2.14  20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+10.0.2.15:20160    tikv          10.0.2.15  20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+10.0.2.16:20160    tikv          10.0.2.16  20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+10.0.3.11:3930     tiflash       10.0.3.11  9000/8123/3930/20170/20292/8234  linux/x86_64  Up  /tidb-data/tiflash-9000  /tidb-deploy/tiflash-9000
+10.0.3.12:3930     tiflash       10.0.3.12  9000/8123/3930/20170/20292/8234  linux/x86_64  Up  /tidb-data/tiflash-9000  /tidb-deploy/tiflash-9000
+10.0.4.11:8300     cdc           10.0.4.11  8300         linux/x86_64  Up       /tidb-data/cdc-8300           /tidb-deploy/cdc-8300
+10.0.4.12:8300     cdc           10.0.4.12  8300         linux/x86_64  Up       /tidb-data/cdc-8300           /tidb-deploy/cdc-8300
+Total nodes: 19

@@ -1,0 +1,18 @@
+Cluster type:       tidb
+Cluster name:       dev-tidb-01
+Cluster version:    v8.1.2
+Deploy user:        tidb
+SSH type:           builtin
+Dashboard URL:      http://10.30.1.21:2379/dashboard
+Grafana URL:        http://10.30.1.31:3000
+ID                 Role          Host       Ports        OS/Arch       Status   Data Dir                      Deploy Dir
+--                 ----          ----       -----        -------       ------   --------                      ----------
+10.30.1.31:9093    alertmanager  10.30.1.31 9093/9094    linux/x86_64  Up       /tidb-data/alertmanager-9093  /tidb-deploy/alertmanager-9093
+10.30.1.31:3000    grafana       10.30.1.31 3000         linux/x86_64  Up       -                             /tidb-deploy/grafana-3000
+10.30.1.21:2379    pd            10.30.1.21 2379/2380    linux/x86_64  Up|L|UI  /tidb-data/pd-2379            /tidb-deploy/pd-2379
+10.30.1.31:9090    prometheus    10.30.1.31 9090/12020   linux/x86_64  Up       /tidb-data/prometheus-9090    /tidb-deploy/prometheus-9090
+10.30.1.11:4000    tidb          10.30.1.11 4000/10080   linux/x86_64  Up       -                             /tidb-deploy/tidb-4000
+10.30.2.11:20160   tikv          10.30.2.11 20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+10.30.2.12:20160   tikv          10.30.2.12 20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+10.30.2.13:20160   tikv          10.30.2.13 20160/20180  linux/x86_64  Up       /tidb-data/tikv-20160         /tidb-deploy/tikv-20160
+Total nodes: 8

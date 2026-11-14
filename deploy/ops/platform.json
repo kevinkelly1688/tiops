@@ -1,0 +1,4 @@
+{
+  "icp": "",
+  "_说明": "在 icp 里填写网站备案号，如 京ICP备12345678号-1；留空则不显示。保存后执行 systemctl restart tidbops 生效。"
+}

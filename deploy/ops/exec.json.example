@@ -1,0 +1,13 @@
+{
+  "clusters": ["prod-tidb-01"],
+  "tiupBin": "/home/tidb/.tiup/bin/tiup",
+  "mysqlBin": "/usr/bin/mysql",
+  "mysqlHost": "10.0.1.11",
+  "mysqlPort": 4000,
+  "mysqlUser": "tidbops_ops",
+  "mysqlPwdEnv": "TIDBOPS_OPS_PWD",
+  "backupRoots": ["local:///data/backup/", "s3://tidb-backup/prod/"],
+  "tempDir": "/var/lib/tidbops-exec",
+  "minTiKV": 3,
+  "alertURL": "http://10.0.1.31:9093"
+}

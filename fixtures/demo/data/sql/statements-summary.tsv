@@ -1,0 +1,7 @@
+DIGEST	SCHEMA_NAME	EXEC_COUNT	AVG_LATENCY	MAX_LATENCY	SUM_LATENCY	AVG_MEM	DIGEST_TEXT
+a3f9c1	shop	18240	2840000000	6100000000	51801600000000	100663296	select * from `orders` where `user_id` = ? and `phone` = ? and `status` in ( ... ) order by `created_at` desc limit ?
+7bd024	shop	620	9700000000	21300000000	6014000000000	2254857830	select `o` . `region` , count ( ? ) from `order_item` `oi` join `orders` `o` on `oi` . `order_id` = `o` . `id` where `oi` . `created_at` > ? group by `o` . `region`
+e810aa	shop	210400	410000000	3200000000	86264000000000	4096	update `inventory` set `stock` = `stock` - ? where `sku` = ? and `stock` >= ?
+5c7e12	shop	3900	1620000000	2900000000	6318000000000	50331648	select `id` , `name` from `users` where date ( `created_at` ) = ?
+91ab33	log	884000	12000000	180000000	10608000000000	2048	insert into `event_log` ( `payload` , `created_at` ) values ( ... )
+2dd7f0	shop	15800	880000000	1700000000	13904000000000	23068672	select `id` , `title` from `product` where `title` like ? limit ?

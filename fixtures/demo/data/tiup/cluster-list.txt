@@ -1,0 +1,3 @@
+Name          User  Version  Path                                               PrivateKey
+----          ----  -------  ----                                               ----------
+prod-tidb-01  tidb  v8.5.2   /home/tidb/.tiup/storage/cluster/clusters/prod-tidb-01  /home/tidb/.tiup/storage/cluster/clusters/prod-tidb-01/ssh/id_rsa

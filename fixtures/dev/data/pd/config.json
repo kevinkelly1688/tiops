@@ -1,0 +1,15 @@
+{
+  "replication": {
+    "location-labels": "zone,host",
+    "max-replicas": 3
+  },
+  "schedule": {
+    "leader-schedule-limit": 4,
+    "max-store-down-time": "30m0s",
+    "region-schedule-limit": 2048
+  },
+  "security": {
+    "cacert-path": "",
+    "key-path": ""
+  }
+}

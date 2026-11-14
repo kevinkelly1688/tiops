@@ -1,0 +1,55 @@
+{
+  "count": 5,
+  "regions": [
+    {
+      "approximate_keys": 960000,
+      "approximate_size": 96,
+      "end_key": "7480000000000000FF705F728000000000FF0F72790000000000FA",
+      "id": 20871,
+      "leader": {
+        "store_id": 2
+      },
+      "start_key": "7480000000000000FF705F728000000000FF0030390000000000FA"
+    },
+    {
+      "approximate_keys": 960000,
+      "approximate_size": 96,
+      "end_key": "7480000000000000FF705F728000000000FF1EB4B90000000000FA",
+      "id": 20872,
+      "leader": {
+        "store_id": 2
+      },
+      "start_key": "7480000000000000FF705F728000000000FF0F72790000000000FA"
+    },
+    {
+      "approximate_keys": 960000,
+      "approximate_size": 96,
+      "end_key": "7480000000000000FF705F728000000000FF2DF6F90000000000FA",
+      "id": 20873,
+      "leader": {
+        "store_id": 2
+      },
+      "start_key": "7480000000000000FF705F728000000000FF1EB4B90000000000FA"
+    },
+    {
+      "approximate_keys": 960000,
+      "approximate_size": 96,
+      "end_key": "7480000000000000FF705F728000000000FF3D39390000000000FA",
+      "id": 20874,
+      "leader": {
+        "store_id": 2
+      },
+      "start_key": "7480000000000000FF705F728000000000FF2DF6F90000000000FA"
+    },
+    {
+      "approximate_keys": 960000,
+      "approximate_size": 96,
+      "end_key": "7480000000000000FF705F728000000000FF4C7B790000000000FA",
+      "id": 20875,
+      "leader": {
+        "store_id": 2
+      },
+      "start_key": "7480000000000000FF705F728000000000FF3D39390000000000FA"
+    }
+  ]
+}

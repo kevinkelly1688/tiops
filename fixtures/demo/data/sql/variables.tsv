@@ -1,0 +1,7 @@
+VARIABLE_NAME	VARIABLE_VALUE
+tidb_mem_quota_query	1073741824
+tidb_enable_prepared_plan_cache	ON
+tidb_gc_life_time	10m0s
+tidb_replica_read	leader
+tidb_slow_log_threshold	300
+tidb_distsql_scan_concurrency	15

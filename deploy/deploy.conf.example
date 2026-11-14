@@ -1,0 +1,82 @@
+# =============================================================================
+# deploy.conf —— tidb-deploy.sh 的配置文件（bash 变量赋值，会以 root 身份被 source，请确认来源可信）
+# 用法：cp deploy.conf.example deploy.conf && chmod 600 deploy.conf && 修改后
+#       ./tidb-deploy.sh deploy --config deploy.conf --dry-run     # 先预览
+#       ./tidb-deploy.sh deploy --config deploy.conf               # 再执行
+# 不想手写：./tidb-deploy.sh wizard
+# =============================================================================
+
+# ---- 基本信息 ----------------------------------------------------------------
+CLUSTER_NAME=tidb-test
+
+# TiDB 版本：
+#   auto    按系统自动选择：glibc ≥ 2.28（CentOS 8/Stream 8/9/Rocky/Alma）→ v8.5 LTS 系列；
+#           CentOS 7（glibc 2.17）→ v7.5 LTS 系列（官方自 v8.4 起不再支持 CentOS 7）
+#   v8.5    指定系列，自动取该系列最新补丁版本
+#   v7.5.4  指定完整版本
+TIDB_VERSION=auto
+
+# ---- 部署模式 ------------------------------------------------------------------
+# single ：单机，所有组件装在本机（1×PD + 1×TiDB + 1×TiKV + 监控），仅用于开发测试
+# cluster：多机，按下面的主机清单部署
+DEPLOY_MODE=single
+
+# single 模式：留空则自动使用本机主 IP
+SINGLE_HOST=""
+
+# cluster 模式（空格或逗号分隔，仅支持 IPv4；同一主机上同一角色只部署一个实例）
+#   生产建议：PD ≥ 3（奇数）、TiDB ≥ 2、TiKV ≥ 3
+# DEPLOY_MODE=cluster
+# PD_HOSTS="10.0.1.4 10.0.1.5 10.0.1.6"
+# TIDB_HOSTS="10.0.1.1 10.0.1.2"
+# TIKV_HOSTS="10.0.1.7 10.0.1.8 10.0.1.9"
+# TIFLASH_HOSTS=""                 # 可选；需要 CPU 支持 AVX2
+# MONITOR_HOST="10.0.1.10"         # 空 = 第一台 PD
+# WITH_MONITOR=true
+
+# 可选：拓扑标签（zone,host），让 PD 按机房 / 可用区打散副本
+# ZONE_MAP="10.0.1.7=az1,10.0.1.8=az2,10.0.1.9=az3"
+
+# 可选：TiKV block-cache（GB）。single 模式留空会按内存 25% 自动设置
+# TIKV_CACHE_GB=
+
+# ---- 用户与目录 ----------------------------------------------------------------
+DEPLOY_USER=tidb
+SSH_PORT=22
+DEPLOY_DIR=/tidb-deploy
+DATA_DIR=/tidb-data        # 建议放在独立的数据盘上（xfs，或 ext4 且挂载选项含 nodelalloc,noatime）
+
+# ---- 前置条件：部署用户（部署前由你完成，脚本只检查、不代劳）-------------------------
+# 所有部署机器和中控机上都要：① 有 DEPLOY_USER 用户 ② 该用户有 sudo 免密
+# ③ 该用户能用密钥免密 SSH 登录集群所有机器（包括中控机自己）。
+# 脚本用 root 运行，但登录各机器一律 tidb@IP + sudo，不再用 root 登录，也不支持密码登录。
+# 不满足时 check / deploy 会中止，并打印修复命令。
+#
+# 部署用户的 SSH 私钥（绝对路径）；留空 = 该用户家目录里的 ~/.ssh/id_rsa
+SSH_KEY=""
+
+# ---- 规格与系统初始化 ------------------------------------------------------------
+# dev ：开发测试，低于推荐配置只警告（多角色合并部署低于 4 核 / 8GB 也只警告）
+# prod：按官方生产配置要求检查，不达标则中止（也可用 --strict）
+SPEC=dev
+
+# 防火墙：open=只放行 TiDB 所需端口（默认）| disable=关闭 firewalld | keep=不动
+FIREWALL=open
+
+# CentOS 7 / 8 已 EOL，官方 yum 源可能失效。设为 auto 时，安装依赖失败会把 repo 备份并切换到 vault 镜像
+REPO_FIX=skip
+REPO_MIRROR=aliyun        # aliyun | vault
+
+# ---- 安装 TiUP：在线 / 离线 -------------------------------------------------------
+# auto：配置了 OFFLINE_SERVER_PKG 就离线，否则在线
+INSTALL_MODE=auto
+# 离线：在联网机器上 ./tidb-deploy.sh offline-pack v7.5.4 制作，或从官方下载页获取
+OFFLINE_SERVER_PKG=""    # 如 /opt/pkg/tidb-community-server-v7.5.4-linux-amd64.tar.gz
+OFFLINE_TOOLKIT_PKG=""   # 可选
+OFFLINE_RPM_DIR=""       # 可选：离线环境放依赖 rpm 的目录（numactl chrony libaio ...）
+# TIUP_MIRROR=""         # 可选：自建镜像地址
+TIUP_UPDATE=false
+
+# ---- 其他 -----------------------------------------------------------------------
+ALLOW_CHECK_FAIL=false   # tiup check 仍有 Fail 时是否继续；仅测试环境可设 true
+INIT_PASSWORD=true       # 启动时生成 root 随机密码（保存到 ${WORKROOT}/<集群名>/root-password.txt，权限 600）

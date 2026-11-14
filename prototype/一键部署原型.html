@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>安装部署 · 一键部署原型</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{--surface-0:#faf9f5;--surface-1:#f3f1ea;--surface-2:#ffffff;--border:rgba(0,0,0,.12);--border-strong:rgba(0,0,0,.28);--border-accent:#378ADD;--text-primary:#1f1e1d;--text-secondary:#5f5e5a;--text-muted:#8a8982;--text-accent:#185FA5;--text-success:#3B6D11;--text-warning:#854F0B;--text-danger:#A32D2D;--bg-accent:#E6F1FB;--bg-success:#EAF3DE;--bg-warning:#FAEEDA;--bg-danger:#FCEBEB;--radius:8px;--font-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root{--surface-0:#1f1e1d;--surface-1:#2a2927;--surface-2:#30302e;--border:rgba(255,255,255,.14);--border-strong:rgba(255,255,255,.3);--border-accent:#85B7EB;--text-primary:#f1efe8;--text-secondary:#b4b2a9;--text-muted:#888780;--text-accent:#B5D4F4;--text-success:#C0DD97;--text-warning:#FAC775;--text-danger:#F7C1C1;--bg-accent:#0C447C;--bg-success:#27500A;--bg-warning:#633806;--bg-danger:#791F1F}}
+body{margin:0;background:var(--surface-0);color:var(--text-primary);font-family:system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+.wrap{max-width:780px;margin:0 auto;padding:16px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+button{font:inherit;color:var(--text-primary);background:transparent;border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:5px 12px;cursor:pointer}
+button:hover{background:var(--surface-1)}button:disabled{opacity:.5;cursor:default}
+input[type=text],input[type=password],select{font:inherit;color:var(--text-primary);background:var(--surface-2);border:0.5px solid var(--border-strong);border-radius:var(--radius);padding:0 8px;box-sizing:border-box}
+code{font-family:var(--font-mono)}
+.pt{font-size:13px;line-height:1.5}
+.pt .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pt .card{background:var(--surface-2);border:0.5px solid var(--border);border-radius:12px;padding:10px 12px;margin:0 0 8px}
+.pt .card h4{font-size:13px;font-weight:500;margin:0 0 6px}
+.pt .sub{font-size:12px;color:var(--text-secondary)}
+.pt .fl{display:block;font-size:12px;color:var(--text-secondary);margin:6px 0 2px}
+.pt input[type=text],.pt input[type=password],.pt select{width:100%;height:30px;font-size:12px}
+.pt .rd{display:flex;gap:10px;flex-wrap:wrap;font-size:12px}
+.pt .rd label{display:flex;gap:4px;align-items:center}
+.pt .tabs{display:flex;gap:2px;flex-wrap:wrap;border-bottom:0.5px solid var(--border);margin:0 0 8px}
+.pt .tb{font-size:12px;padding:6px 9px;border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;color:var(--text-secondary);cursor:pointer}
+.pt .tb.on{color:var(--text-primary);border-bottom-color:var(--text-accent)}
+.pt .new{font-size:11px;padding:0 5px;border-radius:4px;background:var(--bg-accent);color:var(--text-accent);margin-left:4px}
+.pt .step{flex:1;min-width:80px;padding:5px 8px;border-radius:var(--radius);border:0.5px solid var(--border);font-size:12px;color:var(--text-secondary);display:flex;gap:6px;align-items:center}
+.pt .step.cur{border-color:var(--border-accent);background:var(--bg-accent);color:var(--text-accent)}
+.pt .step.done{color:var(--text-success)}
+.pt .step.bad{border-color:var(--text-danger);background:var(--bg-danger);color:var(--text-danger)}
+.pt .log{font-family:var(--font-mono);font-size:12px;line-height:1.55;background:var(--surface-1);border-radius:var(--radius);padding:8px 10px;max-height:240px;overflow:auto;white-space:pre-wrap;word-break:break-all}
+.pt .ts{color:var(--text-muted);margin-right:8px}
+.pt .l-o{color:var(--text-success)}.pt .l-w{color:var(--text-warning)}.pt .l-e{color:var(--text-danger)}.pt .l-p{color:var(--text-secondary)}.pt .l-s{color:var(--text-accent)}
+.pt table{width:100%;border-collapse:collapse;font-size:12px}
+.pt th{font-weight:500;color:var(--text-secondary);text-align:left;padding:4px 6px;border-bottom:0.5px solid var(--border)}
+.pt td{padding:4px 6px;border-bottom:0.5px solid var(--border)}
+.pt .ok{color:var(--text-success)}.pt .wn{color:var(--text-warning)}.pt .er{color:var(--text-danger)}.pt .na{color:var(--text-muted)}
+.pt .ph{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:12px;color:var(--text-secondary)}
+.pt .ph.run{color:var(--text-primary)}.pt .ph.done{color:var(--text-success)}.pt .ph.fail{color:var(--text-danger)}
+.pt .chip{font-size:12px;padding:2px 10px;border-radius:var(--radius);border:0.5px solid var(--border);background:transparent;cursor:pointer}
+.pt .chip.on{background:var(--bg-accent);color:var(--text-accent);border-color:var(--border-accent)}
+.pt .note{font-size:12px;padding:7px 10px;border-radius:var(--radius);margin:6px 0}
+.pt .n-i{background:var(--bg-accent);color:var(--text-accent)}.pt .n-w{background:var(--bg-warning);color:var(--text-warning)}.pt .n-e{background:var(--bg-danger);color:var(--text-danger)}.pt .n-s{background:var(--bg-success);color:var(--text-success)}
+.pt .kv{display:grid;grid-template-columns:96px minmax(0,1fr);gap:3px 10px;font-size:12px}
+.pt .kv span:nth-child(odd){color:var(--text-secondary)}
+.pt .m{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 0 8px}
+.pt .m div{background:var(--surface-1);border-radius:var(--radius);padding:6px 10px}
+.pt .m b{display:block;font-size:18px;font-weight:500}
+.pt .stub{border:0.5px dashed var(--border-strong);border-radius:var(--radius);padding:14px;text-align:center;color:var(--text-muted);font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h2 class="sr-only">安装部署页面原型：保存配置后，在一键部署标签里预检、审批并输入中控机 root 密码，再查看全部部署返回信息</h2>
+<div class="pt">
+<div class="row" style="justify-content:space-between;margin:0 0 8px">
+  <div class="sub"><i class="ti ti-flask" aria-hidden="true"></i> 原型：演示数据，不会执行任何命令。左右分栏、5 张卡片和前 5 个标签沿用现有「安装部署」页；带「新」的是新增部分</div>
+  <div class="row"><span class="sub">演示场景</span><select id="sc" style="width:auto"><option value="ok">全部通过</option><option value="precheck">预检失败（缺部署用户）</option><option value="deploy">部署中途失败（SSH 超时）</option></select></div>
+</div>
+
+<div class="card" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-color:var(--border-accent)">
+  <span class="new" style="margin:0">新</span>
+  <span style="font-size:13px">配置：<b id="cfgName" style="font-weight:500">prod-tidb-01</b></span>
+  <span id="cfgSt" class="sub"></span>
+  <span style="flex:1"></span>
+  <button id="bSave"><i class="ti ti-device-floppy" aria-hidden="true"></i> 保存配置</button>
+</div>
+<div id="saveMsg" class="sub" style="margin:-2px 0 8px"></div>
+
+<div id="grid" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:10px;align-items:start">
+<div id="left">
+  <div class="card"><h4>1 · 目标系统与模式</h4>
+    <label class="fl">目标操作系统</label><select id="f_os"><option>Rocky Linux 9（glibc 2.34）</option><option>CentOS Stream 9（glibc 2.34）</option><option>Rocky Linux 10（glibc 2.39）</option></select>
+    <label class="fl">部署模式</label><div class="rd"><label><input type="radio" name="mode" value="single"> 单机</label><label><input type="radio" name="mode" value="cluster" checked> 多机集群</label></div>
+    <label class="fl" for="f_cluster">集群名</label><input type="text" id="f_cluster" value="prod-tidb-01"></div>
+  <div class="card"><h4>2 · 操作系统用户</h4>
+    <label class="fl" for="f_user">运行 TiUP 与集群的用户（须事先配好）</label><input type="text" id="f_user" value="tidb">
+    <div class="row" style="margin-top:6px;flex-wrap:nowrap"><div style="flex:1"><label class="fl" for="f_port">SSH 端口</label><input type="text" id="f_port" value="22"></div><div style="flex:2"><label class="fl" for="f_key">私钥路径（可选）</label><input type="text" id="f_key" placeholder="留空 = ~tidb/.ssh/id_rsa"></div></div></div>
+  <div class="card"><h4>3 · TiDB 版本</h4><div class="rd" style="flex-direction:column;gap:4px">
+    <label><input type="radio" name="ver" value="auto" checked> 自动（按系统选 v8.5 系列）</label><label><input type="radio" name="ver" value="v8.5"> 指定系列 v8.5</label><label><input type="radio" name="ver" value="v7.5"> 指定系列 v7.5</label></div></div>
+  <div class="card"><h4>4 · 安装方式</h4><div class="rd"><label><input type="radio" name="inst" value="online" checked> 在线</label><label><input type="radio" name="inst" value="offline"> 离线</label></div></div>
+  <div class="card"><h4>5 · 主机与目录</h4>
+    <div id="hSingle" style="display:none"><label class="fl" for="f_single">单机 IP</label><input type="text" id="f_single" value="172.16.0.201"></div>
+    <div id="hMulti"><label class="fl" for="f_pd">PD 主机</label><input type="text" id="f_pd" value="172.16.0.201 172.16.0.202 172.16.0.203">
+    <label class="fl" for="f_tidb">TiDB 主机</label><input type="text" id="f_tidb" value="172.16.0.201 172.16.0.202">
+    <label class="fl" for="f_tikv">TiKV 主机</label><input type="text" id="f_tikv" value="172.16.0.203 172.16.0.204 172.16.0.205">
+    <label class="fl" for="f_mon">监控主机</label><input type="text" id="f_mon" value="172.16.0.204"></div>
+    <div class="row" style="margin-top:6px;flex-wrap:nowrap"><div style="flex:1"><label class="fl" for="f_dd">部署目录</label><input type="text" id="f_dd" value="/tidb-deploy"></div><div style="flex:1"><label class="fl" for="f_da">数据目录</label><input type="text" id="f_da" value="/tidb-data"></div></div>
+    <div class="row" style="margin-top:6px;flex-wrap:nowrap"><div style="flex:1"><label class="fl">规格</label><select id="f_spec"><option value="prod">prod 生产</option><option value="dev">dev 开发测试</option></select></div><div style="flex:1"><label class="fl">防火墙</label><select id="f_fw"><option value="open">只放行 TiDB 端口</option><option value="keep">保持不变</option></select></div></div></div>
+</div>
+
+<div id="right" class="card" style="margin:0">
+  <div class="tabs" id="tabs"></div>
+  <div id="tc"></div>
+</div>
+</div>
+
+<div id="sumbar" class="card" style="display:none;align-items:center;gap:10px;flex-wrap:wrap;border-color:var(--border-accent)">
+  <i class="ti ti-lock" aria-hidden="true"></i><span id="sumTxt" style="flex:1;font-size:12px"></span><button id="bEdit">返回修改配置</button>
+</div>
+<div id="run" style="display:none"></div>
+</div>
+</div>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var S={sc:'ok',tab:'conf',saved:null,hist:[],tok:0,pre:[],dep:[],done:[],failIdx:-1,cur:-1,filter:'all',clock:0,appr:false,running:false,rstep:0,rtab:'log',tries:0};
+var TABS=[['conf','deploy.conf'],['cmd','命令'],['topo','拓扑预览'],['chk','校验'],['dl','离线包与工具下载'],['run','一键部署']];
+var PH=['初始化主机','安装 TiUP','生成拓扑','tiup cluster check','tiup cluster deploy','启动集群','验证'];
+var STP=['预检','审批与 root','部署','结果'];
+function v(id){return $(id).value.trim()}
+function rv(n){var r=document.querySelector('input[name='+n+']:checked');return r?r.value:''}
+function hosts(s){return s.replace(/[,;]/g,' ').split(/\s+/).filter(Boolean)}
+function isIP(s){return /^(\d{1,3}\.){3}\d{1,3}$/.test(s)&&s.split('.').every(function(x){return +x<=255})}
+function allHosts(){var l=rv('mode')==='single'?hosts(v('f_single')):hosts(v('f_pd')).concat(hosts(v('f_tidb')),hosts(v('f_tikv')),hosts(v('f_mon')));return l.filter(function(x,i){return l.indexOf(x)===i})}
+function conf(){var m=rv('mode'),L=['# 由「安装部署」页面生成；用法: ./tidb-deploy.sh deploy --config deploy.conf --dry-run','CLUSTER_NAME='+v('f_cluster'),'TIDB_VERSION='+rv('ver'),'DEPLOY_MODE='+m];
+ if(m==='single')L.push('SINGLE_HOST="'+v('f_single')+'"');else L.push('PD_HOSTS="'+hosts(v('f_pd')).join(' ')+'"','TIDB_HOSTS="'+hosts(v('f_tidb')).join(' ')+'"','TIKV_HOSTS="'+hosts(v('f_tikv')).join(' ')+'"','MONITOR_HOST="'+hosts(v('f_mon')).join(' ')+'"');
+ L.push('','DEPLOY_USER='+v('f_user'),'SSH_PORT='+v('f_port'),'SSH_KEY='+v('f_key'),'DEPLOY_DIR='+v('f_dd'),'DATA_DIR='+v('f_da'),'','SPEC='+v('f_spec'),'FIREWALL='+v('f_fw'),'INSTALL_MODE='+rv('inst'));return L.join('\n')+'\n'}
+function valid(){var E=[],W=[],O=[],m=rv('mode');
+ if(!/^[A-Za-z0-9][A-Za-z0-9_-]{0,31}$/.test(v('f_cluster')))E.push('集群名只能含字母数字、下划线、连字符，且不超过 32 位');else O.push('集群名合法');
+ if(!/^[a-z_][a-z0-9_-]{0,31}$/.test(v('f_user')))E.push('操作系统用户名不合法');else if(v('f_user')==='root')E.push('操作系统用户不能是 root');else O.push('操作系统用户：'+v('f_user'));
+ [['部署目录','f_dd'],['数据目录','f_da']].forEach(function(p){if(v(p[1]).charAt(0)!=='/')E.push(p[0]+'必须是绝对路径')});
+ var lists=m==='single'?{单机:hosts(v('f_single'))}:{PD:hosts(v('f_pd')),TiDB:hosts(v('f_tidb')),TiKV:hosts(v('f_tikv')),监控:hosts(v('f_mon'))};
+ Object.keys(lists).forEach(function(k){lists[k].forEach(function(h){if(!isIP(h))E.push(k+' 的主机「'+h+'」不是合法的 IPv4 地址')})});
+ if(m==='cluster'){if(!lists.PD.length)E.push('至少需要 1 台 PD');if(!lists.TiDB.length)E.push('至少需要 1 台 TiDB');if(!lists.TiKV.length)E.push('至少需要 1 台 TiKV');
+  if((lists.PD.length<3||lists.TiKV.length<3||lists.TiDB.length<2)&&v('f_spec')==='prod'&&lists.PD.length&&lists.TiDB.length&&lists.TiKV.length)E.push('生产规格要求 PD ≥ 3、TiKV ≥ 3、TiDB ≥ 2（当前 '+lists.PD.length+' / '+lists.TiKV.length+' / '+lists.TiDB.length+'）')}
+ W.push('部署前请先在所有机器（含中控机）上配好用户 '+v('f_user')+'：sudo 免密 + 密钥免密 SSH。脚本只检查、不代劳。');
+ if(!E.length)O.push('配置通过校验，可以保存');return{E:E,W:W,O:O}}
+function hash(s){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return ('00000000'+h.toString(16)).slice(-8)+'…'}
+function dirty(){return !S.saved||S.saved.text!==conf()}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function say(m,bad){$('saveMsg').style.color=bad?'var(--text-danger)':'var(--text-secondary)';$('saveMsg').textContent=m}
+function refresh(){var V=valid(),d=dirty();$('cfgName').textContent=v('f_cluster')||'（未命名）';
+ $('cfgSt').innerHTML=!S.saved?'<span class="wn"><i class="ti ti-circle-dashed" aria-hidden="true"></i> 尚未保存到平台</span>':(d?'<span class="wn"><i class="ti ti-alert-triangle" aria-hidden="true"></i> 有未保存的修改（最新已保存 v'+S.saved.ver+'）</span>':'<span class="ok"><i class="ti ti-check" aria-hidden="true"></i> 已保存 v'+S.saved.ver+'，与表单一致</span>');
+ var h='';TABS.forEach(function(t){var n=t[1];if(t[0]==='chk'&&V.E.length)n+=' · '+V.E.length+' 错误';h+='<button class="tb'+(S.tab===t[0]?' on':'')+'" data-t="'+t[0]+'">'+n+(t[0]==='run'?'<span class="new">新</span>':'')+'</button>'});$('tabs').innerHTML=h;
+ [].forEach.call($('tabs').children,function(b){b.onclick=function(){setTab(b.getAttribute('data-t'))}});
+ if(S.tab==='conf')$('tc').innerHTML='<div class="row" style="margin-bottom:6px"><button class="chip" id="cpy">复制</button><button class="chip" id="dwn">下载 deploy.conf</button><span class="sub">平台保存的是同一份内容</span></div><div class="log" style="max-height:300px">'+esc(conf())+'</div>';
+ else if(S.tab==='chk')$('tc').innerHTML=V.E.map(function(t){return '<div class="note n-e">✖ '+esc(t)+'</div>'}).join('')+V.W.map(function(t){return '<div class="note n-w">⚠ '+esc(t)+'</div>'}).join('')+V.O.map(function(t){return '<div class="note n-s">✔ '+esc(t)+'</div>'}).join('');
+ else $('tc').innerHTML='<div class="stub">此标签与现有页面一致，原型从略</div>';
+ if($('dwn'))$('dwn').onclick=function(){say('演示：下载 deploy.conf 到本机浏览器（现有功能不变）')};if($('cpy'))$('cpy').onclick=function(){say('演示：已复制')};
+ if(S.tab==='run'&&S.rstep===0)renderGate()}
+$('bSave').onclick=function(){var V=valid();if(V.E.length){say('存在 '+V.E.length+' 个校验错误，修正后才能保存（见「校验」标签）',true);return}
+ if(S.saved&&!dirty()){say('没有变化，仍是 v'+S.saved.ver);return}
+ var ver=(S.saved?S.saved.ver:0)+1;S.saved={ver:ver,text:conf(),hash:hash(conf()),at:'21:0'+(3+ver)};S.hist.unshift(S.saved);
+ $('saveMsg').style.color='var(--text-success)';$('saveMsg').textContent='已保存为 v'+ver+'（sha256 '+S.saved.hash+'）：写入平台数据目录 deploy/'+v('f_cluster')+'/v'+ver+'.conf，权限 600，记入审计；历史：'+S.hist.slice(0,3).map(function(x){return 'v'+x.ver+' '+x.at}).join(' · ')+'。配置里不含任何密码';refresh()};
+document.querySelectorAll('#left input,#left select').forEach(function(e){e.addEventListener('input',onForm);e.addEventListener('change',onForm)});
+function onForm(){var s=rv('mode')==='single';$('hSingle').style.display=s?'block':'none';$('hMulti').style.display=s?'none':'block';refresh()}
+function setTab(t){S.tab=t;var r=t==='run';$('grid').style.display=r?'none':'grid';$('sumbar').style.display=r?'flex':'none';$('run').style.display=r?'block':'none';
+ if(r){$('sumTxt').innerHTML='<b style="font-weight:500">'+esc(v('f_cluster'))+'</b> · '+(rv('mode')==='single'?'单机':'多机')+' · '+rv('ver')+' · '+allHosts().length+' 台主机 · '+(S.saved?'已保存 v'+S.saved.ver:'未保存')+(S.running?'　<span class="wn">部署执行中，配置已锁定</span>':'');$('bEdit').disabled=S.running;renderRun()}
+ refresh()}
+$('bEdit').onclick=function(){setTab('conf')};
+function renderRun(){if(!$('run').innerHTML){$('run').innerHTML='<div class="card" style="padding:8px 12px"><div class="tabs" id="tabs2" style="margin:0;border:0">'+TABS.map(function(t){return '<button class="tb'+(t[0]==='run'?' on':'')+'" data-t="'+t[0]+'">'+t[1]+(t[0]==='run'?'<span class="new">新</span>':'')+'</button>'}).join('')+'</div></div><div id="stp" class="row" style="flex-wrap:nowrap;margin:0 0 8px;display:none"></div><div id="rp0"></div><div id="rp1" style="display:none"></div><div id="rp2" style="display:none"></div><div id="rp3" style="display:none"></div><div id="rp4" style="display:none"></div>';
+ [].forEach.call($('tabs2').children,function(b){b.onclick=function(){if(S.running){say('部署执行中，不能切换标签；可以先取消');return}setTab(b.getAttribute('data-t'))}})}
+ if(S.rstep===0)renderGate()}
+function stepper(bad){var h='';for(var i=1;i<=4;i++){var c=i<S.rstep?'done':(i===S.rstep?(bad?'bad':'cur'):'');var ic=i<S.rstep?'ti-check':(bad&&i===S.rstep?'ti-x':'ti-circle-'+i);h+='<div class="step '+c+'"><i class="ti '+ic+'" aria-hidden="true"></i>'+STP[i-1]+'</div>'}$('stp').innerHTML=h}
+function showR(n){S.rstep=n;for(var i=0;i<=4;i++)$('rp'+i).style.display=i===n?'block':'none';stepper(false);$('stp').style.display=n===0?'none':'flex'}
+function renderGate(){if(!$('rp0'))return;var V=valid(),d=dirty();
+ var items=[[!!S.saved&&!d&&!V.E.length,'配置已保存且与表单一致',S.saved?(d?'表单有未保存的修改：部署只使用已保存的版本，请先保存':(V.E.length?'配置有校验错误':'部署将使用 v'+S.saved.ver+'（sha256 '+S.saved.hash+'），执行期间不可修改')):'还没有保存过配置：先点页面上方的「保存配置」'],
+  [true,'平台为中控机模式，执行器可用','--local-tiup · 执行器 sudo'],[true,'写开关已开启（admin、admin2）','高风险变更需两人'],
+  [null,'中控机 root 密码','tidb-deploy.sh 要求 root：审批通过、点「开始部署」时输入，只用一次，平台不保存'],
+  [null,'部署用户 '+v('f_user')+' 在所有机器上 sudo 免密 + SSH 免密','由下一步「预检」逐台检查，不满足不能继续']];
+ $('rp0').innerHTML='<div class="card"><h4>部署前提</h4>'+items.map(function(it){var c=it[0]===null?'na':(it[0]?'ok':'er'),ic=it[0]===null?'ti-clock':(it[0]?'ti-check':'ti-x');return '<div class="row" style="margin:3px 0;align-items:flex-start;flex-wrap:nowrap"><i class="ti '+ic+' '+c+'" style="margin-top:2px" aria-hidden="true"></i><div><div>'+it[1]+'</div><div class="sub">'+it[2]+'</div></div></div>'}).join('')+'</div>'+
+ '<div class="row"><button id="b1">开始预检（只读，不改任何机器）</button><span id="gErr" style="font-size:12px;color:var(--text-danger)"></span></div><div class="sub" style="margin-top:6px">也可以继续用「命令」标签里的命令在中控机上手工执行；两种方式使用同一份 deploy.conf</div>';
+ $('b1').onclick=function(){if(!S.saved){$('gErr').textContent='请先保存配置';return}if(d||V.E.length){$('gErr').textContent=d?'表单有未保存的修改，请先保存':'配置有校验错误';return}runPre()}}
+function ts(){var t=S.clock++;var s=Math.floor(t*0.8);return '21:'+('0'+(10+Math.floor(s/60))).slice(-2)+':'+('0'+(s%60)).slice(-2)}
+function lineH(l){return '<div class="l-'+l[0]+'" data-l="'+l[0]+'"><span class="ts">'+l[2]+'</span>'+esc(l[1])+'</div>'}
+function play(list,box,store,onLine,done){var tok=S.tok,i=0;(function nx(){if(tok!==S.tok)return;if(i>=list.length){done&&done();return}var l=list[i++];var e=[l[0],l[1],ts(),l[2]];store.push(e);var d=document.createElement('div');d.innerHTML=lineH(e);box.appendChild(d.firstChild);filt(box);box.scrollTop=box.scrollHeight;onLine&&onLine(e);setTimeout(nx,l[3]||110)})()}
+function filt(box){if(box.id!=='log4')return;[].forEach.call(box.children,function(c){var l=c.getAttribute('data-l');c.style.display=(S.filter==='all'||l===S.filter)?'':'none'})}
+var H=[],BAD='',WARN='';
+function setH(){H=allHosts();BAD=H[Math.min(3,H.length-1)];WARN=H[Math.min(2,H.length-1)]}
+function preList(sc){var a=[['s','==> 环境检查'],['i','本机系统: CentOS Linux 7.9（el7）'],['o','系统在官方测试列表内',1]],u=v('f_user');
+ H.forEach(function(h){if(sc==='precheck'&&h===BAD)a.push(['e',h+' 部署用户 '+u+' 不存在，无法检查 sudo 与 SSH',1]);else a.push(['o',h+' 部署用户 '+u+'：sudo 免密、SSH 免密登录正常',1])});
+ if(sc!=='precheck'){a.push(['o',H.length+' 台主机规格满足所选角色，数据盘 xfs',1]);if(H.length>1)a.push(['w',BAD+' 资源偏低（4 核 / 7GB）：多角色合并部署至少需要 4 核 / 8GB（仅警告）',1]);if(H.length>2)a.push(['w',WARN+' 数据盘为 ext4 且挂载选项缺 nodelalloc（建议加上）',1]);
+  a.push(['o','所需端口均空闲，防火墙策略可处理',1]);a.push(['o','时间同步正常（chronyd，偏差 < 50ms）',1]);a.push(['o','TiDB '+(rv('ver')==='auto'?'v8.5':rv('ver'))+' 与系统 glibc 兼容',1])}
+ return a}
+function cnt(){var o=0,w=0,e=0;S.pre.forEach(function(l){if(l[3]){if(l[0]==='o')o++;if(l[0]==='w')w++;if(l[0]==='e')e++}});if($('cOk')){$('cOk').textContent=o;$('cWn').textContent=w;$('cEr').textContent=e}return[o,w,e]}
+function runPre(){setH();S.tok++;S.pre=[];S.clock=0;S.rtab='log';showR(1);
+ $('rp1').innerHTML='<div class="m"><div><span class="sub">通过</span><b id="cOk">0</b></div><div><span class="sub">警告</span><b id="cWn">0</b></div><div><span class="sub">失败</span><b id="cEr">0</b></div></div><div class="card"><h4>自检日志</h4><div class="log" id="log2"></div></div><div class="card" id="mxc" style="display:none"><h4>逐机检查结果</h4><div id="mx"></div></div><div id="fix" style="display:none" class="note n-e"></div><div class="row" id="a2"></div>';
+ play(preList(S.sc).map(function(l){return [l[0],l[1],l[2],130]}),$('log2'),S.pre,function(){cnt()},function(){var c=cnt(),t=[['i','检查结果：通过 '+c[0]+' · 警告 '+c[1]+' · 失败 '+c[2]]];if(c[2]>0)t.push(['e','前置条件未满足：所有机器（含中控机）都要有部署用户、sudo 免密，且能免密 SSH 登录。请按下方说明配置后重试']);
+  play(t.map(function(l){return [l[0],l[1],0,100]}),$('log2'),S.pre,null,function(){matrix();
+   if(c[2]>0){stepper(true);$('fix').style.display='block';var u=v('f_user');$('fix').innerHTML='<b style="font-weight:500">'+BAD+' 需要先配置部署用户（由你在该机器上执行，平台不代劳）</b><div class="log" style="margin-top:6px;background:transparent;padding:0">useradd -m -s /bin/bash '+u+'\necho \''+u+' ALL=(ALL) NOPASSWD: ALL\' &gt; /etc/sudoers.d/'+u+' &amp;&amp; chmod 440 /etc/sudoers.d/'+u+'\nssh-copy-id -i ~/.ssh/id_rsa.pub '+u+'@'+BAD+'\nssh '+u+'@'+BAD+' \'sudo -n true\' &amp;&amp; echo OK</div>';
+    $('a2').innerHTML='<button id="bRe">我已配置好，重新预检</button><button id="bBk">返回</button><span class="sub">预检失败时不能提交部署申请</span>';$('bRe').onclick=function(){S.sc='ok';$('sc').value='ok';runPre()};$('bBk').onclick=function(){showR(0);renderGate()}}
+   else{$('a2').innerHTML='<button id="bNx">提交部署申请</button><button id="bD2">下载预检报告</button><span class="sub">'+(c[1]>0?c[1]+' 项警告不阻止部署，会写进申请':'')+'</span>';$('bNx').onclick=toAppr;$('bD2').onclick=function(){say('演示：下载 precheck-'+v('f_cluster')+'.txt')}}})})}
+function matrix(){var cols=['部署用户','系统','资源','数据盘','端口','时间同步'];var h='<table><tr><th>主机</th>'+cols.map(function(c){return '<th>'+c+'</th>'}).join('')+'</tr>';
+ H.forEach(function(x){var r=['o','o','o','o','o','o'];if(S.sc==='precheck'){r=['o','-','-','-','-','-'];if(x===BAD)r[0]='e'}else{if(H.length>1&&x===BAD)r[2]='w';if(H.length>2&&x===WARN)r[3]='w'}
+  h+='<tr><td>'+x+'</td>'+r.map(function(q){var m={o:['ok','ti-check'],w:['wn','ti-alert-triangle'],e:['er','ti-x'],'-':['na','ti-minus']}[q];return '<td class="'+m[0]+'"><i class="ti '+m[1]+'" aria-hidden="true"></i></td>'}).join('')+'</tr>'});$('mx').innerHTML=h+'</table>';$('mxc').style.display='block'}
+function toAppr(){S.appr=false;S.tries=0;var c=cnt();showR(2);
+ $('rp2').innerHTML='<div class="card"><div class="row" style="justify-content:space-between"><h4 style="margin:0">变更申请：部署集群 '+esc(v('f_cluster'))+'</h4><span class="sub" style="padding:1px 8px;border-radius:var(--radius);background:var(--bg-danger);color:var(--text-danger)">高风险</span></div><div class="kv" style="margin-top:6px"><span>使用配置</span><span>v'+S.saved.ver+'（sha256 '+S.saved.hash+'），申请提交后不可更换</span><span>影响</span><span>修改 '+H.length+' 台主机的 swap / THP / sysctl / limits / 防火墙 / 时间同步，并部署新集群</span><span>执行身份</span><span>中控机 root（开始部署时输入密码）</span><span>预检</span><span class="ok">通过 '+c[0]+' · 警告 '+c[1]+' · 失败 0</span><span>审批人</span><span id="ap"></span></div></div>'+
+ '<div class="card"><h4>开始部署前：确认并输入 root 密码</h4><label class="fl" for="cn">输入集群名 '+esc(v('f_cluster'))+' 以确认</label><input type="text" id="cn" style="max-width:220px" autocomplete="off">'+
+ '<label class="fl" for="rp" style="margin-top:10px">中控机 root 密码（CentOS）</label><input type="password" id="rp" style="max-width:220px" autocomplete="off">'+
+ '<div class="sub" style="margin-top:4px">tidb-deploy.sh 要求 root。平台用这个密码通过 su 启动脚本：只在内存中用一次，<b style="font-weight:500">不写入配置、日志、审计和下载包</b>，部署一启动就清除；传输走 HTTPS。输错 3 次锁定该申请 10 分钟。演示：输入 wrong 可看到「密码错误」，其他内容都算通过。</div><div id="fe" style="color:var(--text-danger);font-size:12px;margin-top:6px"></div></div>'+
+ '<div class="row"><button id="b3a">模拟 admin2 批准</button><button id="b3b">开始部署</button><span class="sub" id="h3">需要另一名管理员批准后才能开始</span></div>';
+ $('ap').innerHTML='<span class="ok"><i class="ti ti-check" aria-hidden="true"></i> admin 已提交</span>　<span id="a2s" class="wn"><i class="ti ti-clock" aria-hidden="true"></i> admin2 待批准（1 小时内有效）</span>';
+ $('b3a').onclick=function(){S.appr=true;$('a2s').className='ok';$('a2s').innerHTML='<i class="ti ti-check" aria-hidden="true"></i> admin2 已批准';$('b3a').style.display='none';$('h3').textContent='已批准，填写上面两项后开始'};
+ $('b3b').onclick=function(){var fe=$('fe');if(S.tries>=3){fe.textContent='已锁定：root 密码连续输错 3 次，10 分钟后再试';return}if(!S.appr){fe.textContent='还没有第二名管理员批准';return}if($('cn').value.trim()!==v('f_cluster')){fe.textContent='集群名不一致，请输入 '+v('f_cluster');return}
+  var pw=$('rp').value;if(!pw){fe.textContent='请输入中控机 root 密码';return}
+  if(pw==='wrong'){S.tries++;$('rp').value='';fe.textContent=S.tries>=3?'root 密码不正确，已锁定 10 分钟':'root 密码不正确（还剩 '+(3-S.tries)+' 次）。没有任何命令被执行';return}
+  $('rp').value='';fe.textContent='';startDeploy(0)};
+ $('cn').oninput=$('rp').oninput=function(){$('fe').textContent=''}}
+function dl(i,sc){var L=[],p=function(l,t,d){L.push([l,t,0,d||90])},n=H.length,u=v('f_user'),W='/home/'+u+'/.tidb-deploy/'+v('f_cluster');
+ if(i===0){p('s','==> 以 root 身份启动 tidb-deploy.sh');p('o','已通过 su 取得 root；密码已从内存清除，没有写入日志或审计');p('s','==> 初始化主机（swap / THP / sysctl / limits / 防火墙 / 时间同步）');H.forEach(function(h){p('i',h+' 已关闭 swap、THP；sysctl / limits 已写入；防火墙放行 TiDB 端口',60)});p('o',n+' 台主机初始化完成')}
+ if(i===1){p('s','==> 安装 TiUP');p('p','下载 tiup 镜像元数据 ... 完成');p('o','tiup 已安装，cluster 组件 v1.16.3')}
+ if(i===2){p('s','==> 生成拓扑');p('i','写入 '+W+'/topology.yaml');p('o','版本解析: '+(rv('ver')==='auto'?'v8.5':rv('ver'))+' → v8.5.2')}
+ if(i===3){p('s','==> tiup cluster check（先自动修复，再复查）');p('p','Node          Check            Result  Message');p('p',H[0]+'  cpu-governor     Warn    frequency governor is powersave, should be performance');p('w','check --apply 已修复 6 项');p('i','tiup check 复查：Fail 0 · Warn 2');p('o','tiup cluster check 通过')}
+ if(i===4){p('s','==> tiup cluster deploy');p('p','Download necessary components: pd v8.5.2, tikv v8.5.2, tidb v8.5.2, prometheus, grafana ...');
+  if(sc==='deploy'){H.slice(0,Math.max(1,H.indexOf(BAD))).forEach(function(h){p('p','Deploy instances: copy to '+h+' ... done',70)});p('e','Error: failed to scp ... to '+u+'@'+BAD+': ssh: connect to host '+BAD+' port 22: Connection timed out',700);p('e','Verbose debug logs has been written to /home/'+u+'/.tiup/logs/tiup-cluster-debug-2026-10-09-21-17-41.log');return L}
+  H.forEach(function(h){p('p','Deploy instances: copy to '+h+' ... done',60)});p('p','Generate config & init monitored ... done');p('o','Deployed cluster `'+v('f_cluster')+'` successfully')}
+ if(i===5){p('s','==> 启动集群');p('p','Starting component pd / tikv / tidb ... Started instance（全部）');p('p',"The new password is: '******'（已脱敏，原文只写入中控机 600 权限文件）");p('o','已生成 TiDB root 随机密码，保存在 '+W+'/root-password.txt（权限 600）')}
+ if(i===6){p('s','==> 验证');p('o','PD 健康检查通过');p('o','TiDB 状态端口可访问');p('p','tiup cluster display '+v('f_cluster')+' ... 全部实例 Up');p('p','mysql> select tidb_version()  →  Release Version: v8.5.2-...');p('o','============ 部署完成 ============')}
+ return L}
+function phTick(){var h='';PH.forEach(function(p,i){var st=S.done.indexOf(i)>=0?'done':(S.cur===i?(S.failIdx===i?'fail':'run'):'');var ic=st==='done'?'ti-check':(st==='fail'?'ti-x':(st==='run'?'ti-loader-2':'ti-circle'));h+='<div class="ph '+st+'"><i class="ti '+ic+'" aria-hidden="true"></i>'+p+'</div>'});if($('phs'))$('phs').innerHTML=h}
+function askPw(cb){$('a4').innerHTML='<label class="fl" for="rp3" style="margin:0">中控机 root 密码（上次的已清除，续跑要重新输入）</label><input type="password" id="rp3" autocomplete="off" style="max-width:190px"><button id="bGo">继续</button><span id="rp3E" style="color:var(--text-danger);font-size:12px"></span>';
+ $('bGo').onclick=function(){var x=$('rp3').value;if(!x){$('rp3E').textContent='请输入 root 密码';return}if(x==='wrong'){$('rp3').value='';$('rp3E').textContent='root 密码不正确，没有任何命令被执行';return}$('rp3').value='';cb()}}
+function startDeploy(from){S.tok++;var tok=S.tok;S.running=true;$('bEdit').disabled=true;if(from===0){S.dep=[];S.done=[];S.clock=40}S.failIdx=-1;showR(3);
+ $('rp3').innerHTML='<div class="card" style="display:grid;grid-template-columns:170px minmax(0,1fr);gap:12px"><div><h4>阶段</h4><div id="phs"></div></div><div><div class="row" style="justify-content:space-between;margin:0 0 6px"><h4 style="margin:0">实时输出</h4><div class="row"><button class="chip on" data-f="all">全部</button><button class="chip" data-f="w">警告</button><button class="chip" data-f="e">错误</button></div></div><div class="log" id="log4" style="max-height:270px"></div></div></div><div id="n4"></div><div class="row" id="a4"></div>';
+ document.querySelectorAll('.chip[data-f]').forEach(function(b){b.onclick=function(){S.filter=b.getAttribute('data-f');document.querySelectorAll('.chip[data-f]').forEach(function(x){x.className='chip'+(x===b?' on':'')});filt($('log4'))}});
+ function acts(extra){$('a4').innerHTML=extra+'<button id="bD4">下载完整日志</button>';$('bD4').onclick=function(){say('演示：下载 deploy-'+v('f_cluster')+'.log（不含密码）')}}
+ acts('<button id="bCx">取消部署</button><span class="sub">取消在阶段边界生效；已完成的阶段保留，可从断点继续（继续时要重新输入 root 密码）　</span>');
+ $('bCx').onclick=function(){S.tok++;S.running=false;$('bEdit').disabled=false;$('n4').innerHTML='<div class="note n-w">已取消：当前阶段「'+PH[S.cur]+'」结束后停止，已完成的 '+S.done.length+' 个阶段保留。</div>';acts('<button id="bRs">从断点继续</button>');$('bRs').onclick=function(){askPw(function(){startDeploy(S.done.length)})}};
+ for(var k=0;k<from;k++){if(S.done.indexOf(k)<0)S.done.push(k);var e=['i',PH[k]+'已完成，跳过（--force 可重做）',ts()];S.dep.push(e);var d=document.createElement('div');d.innerHTML=lineH(e);$('log4').appendChild(d.firstChild)}
+ if(from>0){var e2=['o','已通过 su 取得 root；密码已从内存清除，没有写入日志或审计',ts()];S.dep.push(e2);var d2=document.createElement('div');d2.innerHTML=lineH(e2);$('log4').appendChild(d2.firstChild)}
+ (function nx(i){if(tok!==S.tok)return;if(i>=PH.length){S.cur=-1;S.running=false;phTick();setTimeout(function(){showR(4);fillRes()},500);return}
+  S.cur=i;phTick();play(dl(i,S.sc),$('log4'),S.dep,null,function(){
+   if(S.sc==='deploy'&&i===4){S.failIdx=4;S.running=false;$('bEdit').disabled=false;phTick();stepper(true);$('n4').innerHTML='<div class="note n-e"><b style="font-weight:500">部署在「tiup cluster deploy」失败：</b>中控机连不上 '+BAD+' 的 22 端口。已完成的 4 个阶段不会重做。检查网络 / 防火墙 / sshd 后从断点继续；失败的 tiup 调试日志在中控机，路径见最后一行。</div>';
+    acts('<button id="bRt">修好后从失败阶段继续</button><span class="sub">继续 = 重新执行失败的阶段；要重新输入 root 密码　</span>');$('bRt').onclick=function(){S.sc='ok';$('sc').value='ok';askPw(function(){startDeploy(4)})};return}
+   if(S.done.indexOf(i)<0)S.done.push(i);phTick();nx(i+1)})})(from)}
+function displayTxt(){var c=v('f_cluster'),r=[];function add(list,role,port,ports){list.forEach(function(h){r.push(h+':'+port+'  '+role+'  '+h+'  '+ports+'  Up')})}
+ if(rv('mode')==='single'){var h=v('f_single');['pd:2379:2379/2380','tidb:4000:4000/10080','tikv:20160:20160/20180','prometheus:9090:9090','grafana:3000:3000'].forEach(function(x){var q=x.split(':');r.push(h+':'+q[1]+'  '+q[0]+'  '+h+'  '+q[2]+'  Up')})}
+ else{add(hosts(v('f_pd')),'pd',2379,'2379/2380');add(hosts(v('f_tidb')),'tidb',4000,'4000/10080');add(hosts(v('f_tikv')),'tikv',20160,'20160/20180');add(hosts(v('f_mon')),'prometheus',9090,'9090');add(hosts(v('f_mon')),'grafana',3000,'3000')}
+ return 'Cluster type:       tidb\nCluster name:       '+c+'\nCluster version:    v8.5.2\nID  Role  Host  Ports  Status\n'+r.join('\n')+'\nTotal nodes: '+r.length}
+function fillRes(){var h=H[0],td=rv('mode')==='single'?v('f_single'):(hosts(v('f_tidb'))[0]||h),mon=rv('mode')==='single'?v('f_single'):(hosts(v('f_mon'))[0]||h),c=cnt();
+ $('rp4').innerHTML='<div class="note n-s"><i class="ti ti-circle-check" aria-hidden="true"></i> 集群 '+esc(v('f_cluster'))+' 部署完成，用时 6 分 12 秒（预检 '+c[1]+' 项警告），使用配置 v'+S.saved.ver+'</div><div class="card"><h4>访问信息</h4><div class="kv"><span>TiDB 版本</span><span>v8.5.2</span><span>SQL 连接</span><span style="font-family:var(--font-mono)">mysql -h '+td+' -P 4000 -u root -p</span><span>Dashboard</span><span style="font-family:var(--font-mono)">http://'+h+':2379/dashboard</span><span>Grafana</span><span style="font-family:var(--font-mono)">http://'+mon+':3000（admin / admin，首次登录改密码）</span><span>TiDB root 密码</span><span class="row"><code id="pw">••••••••••••</code><button class="chip" id="bPw">显示</button><button class="chip" id="bCp">复制</button></span></div><div class="sub" style="margin-top:6px">这是新集群里 TiDB 的 root 随机密码，与上一步输入的 CentOS root 密码无关（后者没有被保存）。只在这里显示，不写入平台日志与审计；原文件在中控机 600 权限文件中，首次登录后请改密码并删除。</div></div>'+
+ '<div class="card"><div class="row" style="justify-content:space-between;margin:0 0 6px"><h4 style="margin:0">部署返回的全部信息</h4><div class="row" id="rt"><button class="chip on" data-r="log">部署日志</button><button class="chip" data-r="pre">预检报告</button><button class="chip" data-r="dis">cluster display</button><button class="chip" data-r="topo">topology.yaml</button><button class="chip" data-r="cfg">deploy.conf v'+S.saved.ver+'</button></div></div><div class="log" id="res" style="max-height:230px"></div></div><div class="row"><button id="bImp">导入到「集群接入」，开始运维</button><button id="bZip">下载全部（日志 + 预检 + 拓扑 + 配置）</button><button id="bAg">重新演示</button></div>';
+ var shown=false;$('bPw').onclick=function(){shown=!shown;$('pw').textContent=shown?'Xk9mPq2vL7eR':'••••••••••••';$('bPw').textContent=shown?'隐藏':'显示'};$('bCp').onclick=function(){say('演示：已复制 TiDB root 密码')};
+ $('bImp').onclick=function(){say('演示：跳转「平台配置 → 集群接入 → 从本机 tiup 导入」，'+v('f_cluster')+' 已预选')};$('bZip').onclick=function(){say('演示：下载 deploy-'+v('f_cluster')+'.zip（不含任何密码）')};$('bAg').onclick=function(){S.tok++;S.pre=[];S.dep=[];S.done=[];S.running=false;showR(0);renderGate();setTab('run')};
+ function tabsR(){var t=S.rtab,b=$('res');[].forEach.call($('rt').children,function(x){x.className='chip'+(x.getAttribute('data-r')===t?' on':'')});
+  if(t==='log')b.innerHTML=S.pre.concat(S.dep).map(lineH).join('');else if(t==='pre'){var q=cnt();b.innerHTML='<div>预检：通过 '+q[0]+' · 警告 '+q[1]+' · 失败 '+q[2]+'</div>'+S.pre.filter(function(l){return l[3]}).map(lineH).join('')}else if(t==='dis')b.textContent=displayTxt();else if(t==='topo')b.textContent='global:\n  user: '+v('f_user')+'\n  deploy_dir: '+v('f_dd')+'\n  data_dir: '+v('f_da')+'\npd_servers / tidb_servers / tikv_servers / monitoring_servers：与 deploy.conf v'+S.saved.ver+' 的主机一致';else b.textContent=S.saved.text;b.scrollTop=0}
+ [].forEach.call($('rt').children,function(b){b.onclick=function(){S.rtab=b.getAttribute('data-r');tabsR()}});tabsR()}
+$('sc').onchange=function(){S.sc=this.value;S.tok++;S.pre=[];S.dep=[];S.done=[];S.running=false;if($('run').innerHTML){showR(0);renderGate()}}
+refresh();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "as_leader": {
+    "2": {
+      "regions_count": 3,
+      "statistics": [
+        {
+          "flow_bytes": 90000000,
+          "hot_degree": 5,
+          "region_id": 20871,
+          "store_id": 2
+        }
+      ],
+      "total_flow_bytes": 224395264
+    }
+  }
+}

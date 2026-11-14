@@ -1,0 +1,5 @@
+NAME="Rocky Linux"
+VERSION="8.9 (Green Obsidian)"
+ID="rocky"
+VERSION_ID="8.9"
+PRETTY_NAME="Rocky Linux 8.9 (Green Obsidian)"

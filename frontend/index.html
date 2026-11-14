@@ -1,0 +1,93 @@
+<!doctype html>
+<!--
+  @author: kevinkelly
+  @license: Apache License 2.0
+  @file: index.html
+  @time: 2026/10/28
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TiDB 运维平台原型</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="logo"><i>Ti</i><div>TiDB Ops<small>运维 · 诊断 · 优化</small></div></div>
+    <nav class="nav">
+      <div class="nav-group">概览</div>
+      <a data-go="overview" href="#overview"><span class="ico">◧</span>集群总览<span class="badge" id="alertBadge" style="display:none">0</span></a>
+      <a data-go="arch" href="#arch"><span class="ico">◈</span>集群架构</a>
+      <div class="nav-group">诊断与优化</div>
+      <a data-go="diag" href="#diag"><span class="ico">✚</span>智能诊断</a>
+      <a data-go="sql" href="#sql"><span class="ico">⌘</span>SQL 优化</a>
+      <a data-go="hotspot" href="#hotspot"><span class="ico">♨</span>热点与调度</a>
+      <a data-go="trouble" href="#trouble"><span class="ico">⚑</span>故障排查</a>
+      <div class="nav-group">运维</div>
+      <a data-go="nodes" href="#nodes"><span class="ico">▤</span>节点管理<span class="badge" id="taskBadge" style="display:none;background:var(--accent)">0</span></a>
+      <a data-go="schedule" href="#schedule"><span class="ico">▦</span>变更排期<span class="badge" id="schedBadge" style="display:none;background:var(--warn)">0</span></a>
+      <a data-go="deploy" href="#deploy"><span class="ico">⬇</span>安装部署</a>
+      <a data-go="shell" href="#shell" id="navShell" hidden><span class="ico">⌨</span>中控机命令</a>
+      <a data-go="ops" href="#ops"><span class="ico">⚙</span>日常运维</a>
+      <a data-go="settings" href="#settings"><span class="ico">☰</span>环境与设置</a>
+      <a data-go="security" href="#security"><span class="ico">⛨</span>权限与审计</a>
+      <div class="nav-group" data-plat="1" data-plat-g="1" hidden>平台配置</div>
+      <a data-go="users" href="#users" data-plat="1" hidden><span class="ico">☺</span>用户管理</a>
+      <a data-go="roles" href="#roles" data-plat="1" hidden><span class="ico">⚖</span>角色权限</a>
+      <a data-go="clusters" href="#clusters" data-plat="1" data-plat-cl="1" hidden><span class="ico">⛁</span>集群接入</a>
+      <div class="nav-group">帮助</div>
+      <a data-go="help" href="#help"><span class="ico">?</span>使用帮助</a>
+    </nav>
+    <div class="side-ver" id="sideVer" hidden></div>
+  </aside>
+  <div class="main">
+    <header class="top">
+      <h1 id="pageTitle">集群总览</h1>
+      <select id="clSel" data-nc="cl-sel" aria-label="选择集群"><option>prod-tidb-01（v8.5.2）</option><option>stg-tidb-01（v8.5.2）</option><option>dev-tidb-01（v8.1.0）</option></select>
+      <span class="pill mock">产品演示</span>
+      <span class="sp"></span>
+      <span class="pill">知识来源：docs.pingcap.com/zh</span>
+      <button class="btn" id="helpBtn" aria-label="查看本页使用帮助" title="查看本页使用帮助">? 帮助</button>
+    <span class="theme-sw" id="themeBtn" data-theme-sw role="group" aria-label="界面主题"></span>
+    </header>
+    <main class="content" id="view"></main>
+    <footer class="site-foot" id="siteFoot" hidden></footer>
+  </div>
+</div>
+<aside class="drawer" id="drawer" aria-label="详情"><header><h3 id="drTitle"></h3><button class="btn sm" data-close="1">关闭 ✕</button></header><div class="dbody" id="drBody"></div></aside>
+<div class="toast" id="toast" role="status"></div>
+<script src="js/cluster.js"></script>
+<script src="js/data.js"></script>
+<script src="js/catalog.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ops.js"></script>
+<script src="js/icp.js"></script>
+<script src="js/login.js"></script>
+<script src="js/nodes.js"></script>
+<script src="js/config.js"></script>
+<script src="js/maint.js"></script>
+<script src="js/schedule.js"></script>
+<script src="js/roadmap.js"></script>
+<script src="js/settings.js"></script>
+<script src="js/security.js"></script>
+<script src="js/deployui.js"></script>
+<script src="js/deployrun.js"></script>
+<script src="js/shellui.js"></script>
+<script src="js/ops_pages.js"></script>
+<script src="js/ops_security.js"></script>
+<script src="js/ops_insight.js"></script>
+<script src="js/ops_notify.js"></script>
+<script src="js/ops_governance.js"></script>
+<script src="js/ops_users.js"></script>
+<script src="js/ops_roles.js"></script>
+<script src="js/ops_clusters.js"></script>
+<script src="js/ops_lb.js"></script>
+<script src="js/watermark.js"></script>
+<script src="js/ops_about.js"></script>
+<script src="js/help.js"></script>
+<script src="js/boot.js"></script>
+</body>
+</html>

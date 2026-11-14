@@ -1,0 +1,12 @@
+[
+  {
+    "annotations": {
+      "description": "状态端口探测失败（预发环境滚动重启中）"
+    },
+    "labels": {
+      "alertname": "TiDB_server_is_down",
+      "instance": "10.20.1.12:4000",
+      "severity": "warning"
+    }
+  }
+]

@@ -1,0 +1,3 @@
+Time	Digest	Plan_digest	DB	User	Query_time	Parse_time	Compile_time	Process_time	Wait_time	Total_keys	Process_keys	Result_rows	Mem_max	Index_names	Query
+2026-10-05 09:58:01.123	a3f9c1	p1	shop	app_order	2.91	0.001	0.01	2.7	0.1	4200000	120000	20	100663296		SELECT * FROM orders WHERE user_id = ? AND phone = ? AND status IN (...) ORDER BY created_at DESC LIMIT ?
+2026-10-05 09:58:42.001	a3f9c1	p1	shop	app_order	2.77	0.001	0.01	2.6	0.1	4150000	118000	20	100663296		SELECT * FROM orders WHERE user_id = ? AND phone = ? AND status IN (...) ORDER BY created_at DESC LIMIT ?

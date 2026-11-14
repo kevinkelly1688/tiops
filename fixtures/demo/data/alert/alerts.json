@@ -1,0 +1,32 @@
+[
+  {
+    "annotations": {
+      "description": "磁盘使用率 86%"
+    },
+    "labels": {
+      "alertname": "TiKV_disk_used_more_than_80%",
+      "instance": "10.0.2.14:20160",
+      "severity": "critical"
+    }
+  },
+  {
+    "annotations": {
+      "description": "Raftstore 线程 CPU 超过阈值"
+    },
+    "labels": {
+      "alertname": "TiKV_raftstore_thread_cpu_seconds_total",
+      "instance": "10.0.2.12:20160",
+      "severity": "critical"
+    }
+  },
+  {
+    "annotations": {
+      "description": "内存使用率 83%"
+    },
+    "labels": {
+      "alertname": "TiDB_memory_high",
+      "instance": "10.0.1.13:4000",
+      "severity": "warning"
+    }
+  }
+]

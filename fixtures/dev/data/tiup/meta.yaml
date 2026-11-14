@@ -1,0 +1,21 @@
+user: tidb
+tidb_version: v8.1.2
+topology:
+  global:
+    user: tidb
+    ssh_port: 22
+  monitored:
+    node_exporter_port: 9100
+  server_configs:
+    tidb:
+      security.cluster-ssl-key: ""
+      password: "***"
+  pd_servers:
+    - host: 10.30.1.21
+  tikv_servers:
+    - host: 10.30.2.11
+      port: 20160
+      status_port: 20180
+      deploy_dir: /tidb-deploy/tikv-20160
+      data_dir: /tidb-data/tikv-20160
+      log_dir: /tidb-log/tikv-20160

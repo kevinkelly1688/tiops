@@ -1,0 +1,29 @@
+{
+  "leader": {
+    "member_id": 1001,
+    "name": "pd-1"
+  },
+  "members": [
+    {
+      "client_urls": [
+        "http://10.20.1.21:2379"
+      ],
+      "member_id": 1001,
+      "name": "pd-1"
+    },
+    {
+      "client_urls": [
+        "http://10.20.1.22:2379"
+      ],
+      "member_id": 1002,
+      "name": "pd-2"
+    },
+    {
+      "client_urls": [
+        "http://10.20.1.23:2379"
+      ],
+      "member_id": 1003,
+      "name": "pd-3"
+    }
+  ]
+}

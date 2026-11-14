@@ -1,0 +1,101 @@
+{
+  "count": 3,
+  "stores": [
+    {
+      "status": {
+        "available": "0.41TiB",
+        "capacity": "0.5TiB",
+        "leader_count": 275,
+        "region_count": 820,
+        "region_weight": 1,
+        "start_ts": "2026-09-20T03:00:00Z",
+        "used_size": "96GiB"
+      },
+      "store": {
+        "address": "10.30.2.11:20160",
+        "id": 1,
+        "labels": [
+          {
+            "key": "zone",
+            "value": "az1"
+          },
+          {
+            "key": "rack",
+            "value": "r01"
+          },
+          {
+            "key": "host",
+            "value": "10-30-2-11"
+          }
+        ],
+        "state_name": "Up",
+        "status_address": "10.30.2.11:20180",
+        "version": "8.1.2"
+      }
+    },
+    {
+      "status": {
+        "available": "0.41TiB",
+        "capacity": "0.5TiB",
+        "leader_count": 270,
+        "region_count": 815,
+        "region_weight": 1,
+        "start_ts": "2026-09-20T03:00:00Z",
+        "used_size": "92GiB"
+      },
+      "store": {
+        "address": "10.30.2.12:20160",
+        "id": 2,
+        "labels": [
+          {
+            "key": "zone",
+            "value": "az1"
+          },
+          {
+            "key": "rack",
+            "value": "r02"
+          },
+          {
+            "key": "host",
+            "value": "10-30-2-12"
+          }
+        ],
+        "state_name": "Up",
+        "status_address": "10.30.2.12:20180",
+        "version": "8.1.2"
+      }
+    },
+    {
+      "status": {
+        "available": "0.40TiB",
+        "capacity": "0.5TiB",
+        "leader_count": 280,
+        "region_count": 830,
+        "region_weight": 1,
+        "start_ts": "2026-09-20T03:00:00Z",
+        "used_size": "101GiB"
+      },
+      "store": {
+        "address": "10.30.2.13:20160",
+        "id": 3,
+        "labels": [
+          {
+            "key": "zone",
+            "value": "az1"
+          },
+          {
+            "key": "rack",
+            "value": "r03"
+          },
+          {
+            "key": "host",
+            "value": "10-30-2-13"
+          }
+        ],
+        "state_name": "Up",
+        "status_address": "10.30.2.13:20180",
+        "version": "8.1.2"
+      }
+    }
+  ]
+}

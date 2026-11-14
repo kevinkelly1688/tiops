@@ -1,0 +1,41 @@
+# TiDB Ops 平台（Web 进程）。运行账号 tidbops：非 root、无登录 shell、不在 tidb 组，
+# 只能通过 sudo 调用唯一的受限 exec 入口（见 sudoers.tidbops）。
+[Unit]
+Description=TiDB Ops platform
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=tidbops
+Group=tidbops
+# 默认监听 0.0.0.0:8018，--allow-remote 允许非本机监听：这是明文 HTTP，只适合受信任的内网；
+# 对外请放在带 TLS 与访问控制的反向代理之后，或把 --listen 改回 127.0.0.1:端口。
+# 换端口 / 地址：安装时加 --listen <地址:端口>。
+# --exec sudo 表示经 sudo 调用受限 exec 入口
+ExecStart=/opt/tidbops/bin/tidbops-server \
+  --web /opt/tidbops/web \
+  --listen 0.0.0.0:8018 \
+  --allow-remote \
+  --data-dir /var/lib/tidbops \
+  --env prod \
+  --exec sudo --exec-sudo-user tidb --exec-bin /opt/tidbops/bin/tidbops-server \
+  --exec-policy /etc/tidb-ops/exec.json --key-file /etc/tidb-ops/exec.key \
+  --home /home/tidb --mysql-user tidbops_ro
+EnvironmentFile=-/etc/tidb-ops/env
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=no
+# sudo 需要提权，所以不能设置 NoNewPrivileges=yes；其余加固项照常开启
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+ReadWritePaths=/var/lib/tidbops
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+# AF_NETLINK：「中控机命令」在平台进程内执行的 ss / ip 等命令要用 netlink；sudo 的 PAM 审计模块也可能用到
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX AF_NETLINK
+LimitNOFILE=65536
+MemoryMax=1G
+
+[Install]
+WantedBy=multi-user.target

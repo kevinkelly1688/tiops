@@ -1,0 +1,7 @@
+# /etc/sudoers.d/tidbops —— 只放行这两条固定命令（参数也固定）。用 visudo -cf 校验后再安装。
+# exec --stdin：受限执行器（节点管理等结构化命令，白名单 + 审批令牌）；
+# shell-exec --stdin：「中控机命令」入口（以 tidb 身份执行只读命令；变更命令由它用 tidb 的 sudo 免密起 systemd-run 临时单元）。
+# 不需要「中控机命令」功能的环境可以删掉第二条，页面会提示通道不可用。
+Defaults:tidbops !requiretty
+tidbops ALL=(tidb) NOPASSWD: /opt/tidbops/bin/tidbops-server exec --stdin
+tidbops ALL=(tidb) NOPASSWD: /opt/tidbops/bin/tidbops-server shell-exec --stdin

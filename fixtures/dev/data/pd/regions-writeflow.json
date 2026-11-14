@@ -1,0 +1,25 @@
+{
+  "count": 2,
+  "regions": [
+    {
+      "approximate_keys": 960000,
+      "approximate_size": 96,
+      "end_key": "7480000000000000FF705F728000000000FF0F72790000000000FA",
+      "id": 20871,
+      "leader": {
+        "store_id": 2
+      },
+      "start_key": "7480000000000000FF705F728000000000FF0030390000000000FA"
+    },
+    {
+      "approximate_keys": 960000,
+      "approximate_size": 96,
+      "end_key": "7480000000000000FF765F728000000034FF82FE400000000000FA",
+      "id": 30211,
+      "leader": {
+        "store_id": 2
+      },
+      "start_key": "7480000000000000FF765F728000000034FF73BC000000000000FA"
+    }
+  ]
+}
